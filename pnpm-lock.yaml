@@ -99,6 +99,9 @@ importers:
       nanoid:
         specifier: 3.3.8
         version: 3.3.8
+      oniguruma-parser:
+        specifier: ^0.12.1
+        version: 0.12.1
       svelte:
         specifier: ^5.16.1
         version: 5.47.1

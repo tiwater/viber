@@ -2,7 +2,7 @@
 import Header from "../components/header.astro";
 import TryAgentSection from "../components/try-agent-section.svelte";
 import '../styles/playground.css';
-import { ChevronRight, Bot, Hammer, Box, Zap, Code2, Activity } from "lucide-svelte";
+import { ChevronRight, Bot, Hammer, Box, Zap, Code2, Activity, ArrowRight } from "lucide-svelte";
 
 const title = "Viber | Agent Framework for Vibe Working";
 
@@ -10,32 +10,32 @@ const features = [
   {
     icon: "Bot",
     title: "Multi-Agent System",
-    description: "Define and orchestrate multiple AI agents that collaborate to solve complex tasks"
+    description: "Define and orchestrate multiple AI agents that collaborate to solve complex tasks."
   },
   {
     icon: "Hammer",
     title: "Tool Framework",
-    description: "Decorator-based tool definitions with full Zod schema validation"
+    description: "Decorator-based tool definitions with full Zod schema validation."
   },
   {
     icon: "Box",
     title: "Space Management",
-    description: "Organize conversations, artifacts, and tasks in isolated workspaces"
+    description: "Organize conversations, artifacts, and tasks in isolated workspaces."
   },
   {
     icon: "Zap",
     title: "Reactive State",
-    description: "Zustand-based state management with real-time updates"
+    description: "Zustand-based state management with real-time updates."
   },
   {
     icon: "Code2",
     title: "Framework Agnostic",
-    description: "Works seamlessly with React, Svelte, or vanilla JavaScript"
+    description: "Works seamlessly with React, Svelte, or vanilla JavaScript."
   },
   {
     icon: "Activity",
     title: "Streaming Support",
-    description: "Built-in streaming for real-time AI responses and progress updates"
+    description: "Built-in streaming for real-time AI responses and progress updates."
   }
 ];
 ---
@@ -65,56 +65,80 @@ const features = [
       });
     </script>
   </head>
-  <body>
-    <div class="layout">
+  <body class="antialiased min-h-screen bg-background text-foreground selection:bg-cyan-500/30">
+    <div class="flex flex-col min-h-screen">
       <Header />
-      <main>
+      <main class="flex-1 flex flex-col relative">
+
+        <!-- Background Gradients -->
+        <div class="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
+            <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-cyan-500/5 blur-[120px] mix-blend-screen dark:mix-blend-screen"></div>
+            <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-500/5 blur-[120px] mix-blend-screen dark:mix-blend-screen"></div>
+        </div>
 
         <!-- Hero Section -->
-        <section class="hero">
-          <div class="hero-content">
-            <h1 class="hero-title">Viber</h1>
-            <p class="hero-tagline">
-              Multi-agent collaboration framework for vibe working.
-              <br />
+        <section class="relative pt-32 pb-20 px-6">
+          <div class="container mx-auto max-w-5xl text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/50 bg-secondary/30 text-xs font-medium text-muted-foreground mb-8 backdrop-blur-sm">
+              <span class="flex h-2 w-2 rounded-full bg-cyan-500 animate-pulse"></span>
+              v1.0 is now available
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
+              The <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">Agent Framework</span><br/> for Vibe Working
+            </h1>
+
+            <p class="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
               Build, orchestrate, and deploy autonomous agents with ease.
+              A type-safe, reactive framework for the next generation of AI apps.
             </p>
-            <div class="hero-actions">
-              <a href="/getting-started/installation/" class="btn-primary">
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <a href="/getting-started/installation/" class="h-12 px-8 rounded-full bg-foreground text-background font-medium hover:opacity-90 transition-opacity flex items-center gap-2">
                 Get Started
-                <ChevronRight class="icon" />
+                <ArrowRight size={16} />
               </a>
-              <a href="/playground/" class="btn-secondary">
+              <a href="/playground/" class="h-12 px-8 rounded-full border border-border bg-background/50 hover:bg-secondary/50 backdrop-blur-sm transition-colors flex items-center gap-2 font-medium">
                 Try Playground
               </a>
             </div>
           </div>
         </section>
 
-        <!-- Try Agent Section -->
-        <section class="try-agent">
-          <div class="container">
-            <TryAgentSection client:load />
+        <!-- Try Agent Section (Interactive) -->
+        <section class="py-12 px-6">
+          <div class="container mx-auto max-w-5xl">
+             <div class="rounded-xl border border-border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">
+                <TryAgentSection client:load />
+             </div>
           </div>
         </section>
 
-        <!-- Features Section -->
-        <section class="features">
-          <div class="container">
-            <h2 class="section-title">Why Choose Viber?</h2>
-            <div class="features-grid">
+        <!-- Features Grid -->
+        <section class="py-24 px-6 relative">
+          <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16">
+              <h2 class="text-3xl font-bold mb-4">Why Choose Viber?</h2>
+              <p class="text-muted-foreground max-w-2xl mx-auto">
+                Designed for developer experience and production reliability.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {features.map((feature) => {
                 const Icon = {
                   Bot, Hammer, Box, Zap, Code2, Activity
                 }[feature.icon];
                 
                 return (
-                  <div class="feature-card">
-                    <span class="feature-icon">
-                      <Icon size={32} />
-                    </span>
-                    <h3 class="feature-title">{feature.title}</h3>
-                    <p class="feature-description">{feature.description}</p>
+                  <div class="group p-6 rounded-2xl border border-border/50 bg-card/30 hover:border-border/80 hover:bg-card/50 transition-all duration-300">
+                    <div class="h-12 w-12 rounded-xl bg-secondary/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                      <div class="text-cyan-500 dark:text-cyan-400">
+                        <Icon size={24} />
+                      </div>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">{feature.title}</h3>
+                    <p class="text-muted-foreground leading-relaxed text-sm">{feature.description}</p>
                   </div>
                 );
               })}
@@ -122,352 +146,64 @@ const features = [
           </div>
         </section>
 
-        <!-- Quick Start Section -->
-        <section class="quickstart">
-          <div class="container">
-            <h2 class="section-title">Quick Start</h2>
-            <div class="code-block">
-              <pre><code>npm install viber
+        <!-- Quick Start -->
+        <section class="py-24 px-6 border-t border-border/40 bg-secondary/5">
+          <div class="container mx-auto max-w-4xl">
+             <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="flex-1 text-center md:text-left">
+                  <h2 class="text-3xl font-bold mb-4">Start building in seconds</h2>
+                  <p class="text-muted-foreground mb-8">
+                    Install the package and create your first agent with just a few lines of code. No complex configuration required.
+                  </p>
+                  <a href="/getting-started/quick-start/" class="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-400 font-medium transition-colors">
+                    Read the full guide
+                    <ArrowRight size={16} />
+                  </a>
+                </div>
 
-import {"{"} Agent, Space {"}"} from 'viber';
+                <div class="flex-1 w-full max-w-lg">
+                  <div class="rounded-xl border border-border bg-[#0d1117] p-6 shadow-2xl overflow-hidden relative group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-purple-500"></div>
+                    <pre class="font-mono text-sm leading-relaxed overflow-x-auto">
+<code class="text-gray-300"><span class="text-cyan-400">pnpm</span> add viber
 
-const agent = new Agent({"{"} 
-  name: 'Assistant',
-  model: 'openai:gpt-4o',
-  systemPrompt: 'You are a helpful assistant.'
+<span class="text-purple-400">import</span> {"{"} Agent, Space {"}"} <span class="text-purple-400">from</span> <span class="text-green-400">'viber'</span>;
+
+<span class="text-purple-400">const</span> agent = <span class="text-purple-400">new</span> <span class="text-yellow-300">Agent</span>({"{"}
+  name: <span class="text-green-400">'Assistant'</span>,
+  model: <span class="text-green-400">'openai:gpt-4o'</span>,
+  systemPrompt: <span class="text-green-400">'You are a helpful assistant.'</span>
 {"}"});
 
-const result = await agent.streamText({"{"} 
-  messages: [{"{"} role: 'user', content: 'Hello!' {"}"}]
+<span class="text-purple-400">const</span> result = <span class="text-purple-400">await</span> agent.<span class="text-blue-400">streamText</span>({"{"}
+  messages: [{"{"} role: <span class="text-green-400">'user'</span>, content: <span class="text-green-400">'Hello!'</span> {"}"}]
 {"}"});</code></pre>
-            </div>
-            <div class="quickstart-link">
-              <a href="/getting-started/quick-start/" class="link">
-                Read the full guide →
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <!-- CTA Section -->
-        <section class="cta">
-          <div class="container">
-            <h2 class="cta-title">Ready to Build Agents?</h2>
-            <p class="cta-description">
-              Start building powerful multi-agent applications with Viber's comprehensive framework
-            </p>
-            <div class="cta-actions">
-              <a href="/getting-started/installation/" class="btn-primary">
-                Read Documentation
-              </a>
-              <a href="/api/" class="btn-secondary">
-                API Reference
-              </a>
-            </div>
+                  </div>
+                </div>
+             </div>
           </div>
         </section>
 
         <!-- Footer -->
-        <footer class="footer">
-          <div class="container">
-            <p>© 2024 Viber. MIT License.</p>
+        <footer class="py-12 px-6 border-t border-border bg-background">
+          <div class="container mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-sm text-muted-foreground">
+              © 2024 Viber. MIT License.
+            </div>
+            <div class="flex gap-6 text-sm font-medium">
+               <a href="https://github.com/tiwater/viber" target="_blank" class="text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
+               <a href="/api/" class="text-muted-foreground hover:text-foreground transition-colors">API</a>
+            </div>
           </div>
         </footer>
+
       </main>
     </div>
   </body>
 </html>
 
 <style>
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  html, body {
-    height: 100%;
-  }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-    background: var(--sl-color-bg);
-    color: var(--sl-color-text);
-  }
-
-  .layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  main {
-    flex: 1;
-  }
-
-  .container {
-    max-width: 72rem;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-
-  /* Hero Section */
-  .hero {
-    padding: 6rem 1.5rem;
-    text-align: center;
-    background: var(--sl-color-bg);
-  }
-
-  .hero-content {
-    max-width: 48rem;
-    margin: 0 auto;
-  }
-
-  .hero-title {
-    font-size: 4rem;
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.025em;
-    background: linear-gradient(135deg, var(--sl-color-accent) 0%, #22d3ee 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero-tagline {
-    font-size: 1.25rem;
-    line-height: 1.75;
-    color: var(--muted-foreground);
-    margin-bottom: 2.5rem;
-  }
-  
-  /* ... */
-
-  .feature-description {
-    font-size: 0.875rem;
-    color: var(--muted-foreground);
-    line-height: 1.6;
-  }
-  
-  /* ... */
-
-  .footer p {
-    font-size: 0.875rem;
-    color: var(--muted-foreground);
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--sl-color-white);
-    background: var(--sl-color-accent);
-    border-radius: 0.5rem;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-  }
-
-  .btn-primary:hover {
-    opacity: 0.9;
-  }
-
-  .btn-primary :global(.icon) {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .btn-secondary {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--sl-color-text);
-    border: 1px solid var(--sl-color-hairline);
-    border-radius: 0.5rem;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-  }
-
-  .btn-secondary:hover {
-    background: var(--sl-color-gray-6);
-  }
-
-  /* Features Section */
-  .features {
-    padding: 5rem 1.5rem;
-    background: var(--sl-color-bg);
-  }
-
-  .section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    text-align: center;
-    color: var(--sl-color-text);
-    margin-bottom: 3rem;
-  }
-
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .feature-card {
-    padding: 1.5rem;
-    background: var(--sl-color-bg-nav);
-    border: 1px solid var(--sl-color-hairline);
-    border-radius: 0.75rem;
-    transition: border-color 0.2s ease;
-  }
-
-  .feature-card:hover {
-    border-color: var(--sl-color-accent);
-  }
-
-  .feature-icon {
-    font-size: 2rem;
-    display: block;
-    margin-bottom: 1rem;
-  }
-
-  .feature-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: var(--sl-color-text);
-    margin-bottom: 0.5rem;
-  }
-
-  .feature-description {
-    font-size: 0.875rem;
-    color: var(--muted-foreground);
-    line-height: 1.6;
-  }
-
-  /* Quick Start Section */
-  .quickstart {
-    padding: 5rem 1.5rem;
-    background: var(--sl-color-gray-6);
-  }
-
-  .code-block {
-    max-width: 40rem;
-    margin: 0 auto;
-    background: var(--sl-color-bg);
-    border: 1px solid var(--sl-color-hairline);
-    border-radius: 0.5rem;
-    overflow: hidden;
-  }
-
-  .code-block pre {
-    padding: 1.5rem;
-    overflow-x: auto;
-    font-size: 0.875rem;
-    line-height: 1.7;
-  }
-
-  .code-block code {
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
-    color: var(--sl-color-text);
-  }
-
-  .quickstart-link {
-    text-align: center;
-    margin-top: 2rem;
-  }
-
-  .link {
-    color: var(--sl-color-accent);
-    text-decoration: none;
-    font-weight: 500;
-    transition: opacity 0.2s ease;
-  }
-
-  .link:hover {
-    opacity: 0.8;
-    text-decoration: underline;
-  }
-
-  /* CTA Section */
-  .cta {
-    padding: 4rem 1.5rem;
-    background: linear-gradient(135deg, var(--sl-color-accent), color-mix(in srgb, var(--sl-color-accent) 70%, #22d3ee));
-    text-align: center;
-  }
-
-  .cta-title {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--sl-color-white);
-    margin-bottom: 1rem;
-  }
-
-  .cta-description {
-    font-size: 1rem;
-    color: var(--sl-color-white);
-    opacity: 0.9;
-    margin-bottom: 2rem;
-    max-width: 36rem;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .cta-actions {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  .cta .btn-primary {
-    background: var(--sl-color-white);
-    color: var(--sl-color-accent);
-  }
-
-  .cta .btn-secondary {
-    border-color: rgba(255,255,255,0.3);
-    color: var(--sl-color-white);
-  }
-
-  .cta .btn-secondary:hover {
-    background: rgba(255,255,255,0.1);
-  }
-
-  /* Footer */
-  .footer {
-    padding: 2rem 1.5rem;
-    background: var(--sl-color-bg);
-    border-top: 1px solid var(--sl-color-hairline);
-    text-align: center;
-  }
-
-  .footer p {
-    font-size: 0.875rem;
-    color: var(--muted-foreground);
-  }
-
-  @media (max-width: 768px) {
-    .hero-title {
-      font-size: 2.5rem;
-    }
-
-    .section-title {
-      font-size: 1.75rem;
-    }
-
-    .features-grid {
-      grid-template-columns: 1fr;
-    }
+  :global(.dark) {
+    color-scheme: dark;
   }
 </style>
