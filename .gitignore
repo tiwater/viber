@@ -5,6 +5,7 @@ node_modules/
 # Build outputs
 dist/
 .svelte-kit/
+.astro/
 
 # IDE
 .idea/
