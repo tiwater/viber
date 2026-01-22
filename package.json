@@ -11,6 +11,7 @@
     "build": "tsup && pnpm build:svelte",
     "build:svelte": "svelte-package -i src/svelte -o dist/svelte",
     "build:docs": "pnpm build && cd docs && pnpm install --no-frozen-lockfile && pnpm build",
+    "start": "pnpm start:docs",
     "start:docs": "cd docs && pnpm preview",
     "dev": "pnpm run dev:lib & pnpm run dev:docs",
     "dev:lib": "tsup --watch",
