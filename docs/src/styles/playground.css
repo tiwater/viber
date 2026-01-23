@@ -138,7 +138,38 @@
   --border: #27272a;
   --input: #27272a;
   --ring: var(--sl-color-accent-high);
+}
 
+/* Light mode overrides for better contrast */
+:root[data-theme='light'] {
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+
+  --card: #f8fafc;
+  --card-foreground: #0a0a0a;
+
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
+
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+
+  --muted: #f1f5f9;
+  --muted-foreground: #52525b;
+  /* Zinc 600 - much darker for readability */
+
+  --accent: #f1f5f9;
+  --accent-foreground: #0f172a;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #2563eb;
 }
 
 @layer base {

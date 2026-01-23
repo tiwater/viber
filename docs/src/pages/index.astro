@@ -105,14 +105,6 @@ const features = [
         <!-- Hero Section -->
         <section class="relative pt-32 pb-20 px-6">
           <div class="container mx-auto max-w-5xl text-center">
-            <div
-              class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/50 bg-secondary/30 text-xs font-medium text-muted-foreground mb-8 backdrop-blur-sm"
-            >
-              <span class="flex h-2 w-2 rounded-full bg-cyan-500 animate-pulse"
-              ></span>
-              v1.0 is now available
-            </div>
-
             <h1
               class="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70"
             >
@@ -151,10 +143,8 @@ const features = [
 
         <!-- Try Agent Section (Interactive) -->
         <section class="py-12 px-6">
-          <div class="container mx-auto max-w-5xl">
-            <div
-              class="rounded-xl border border-border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden"
-            >
+          <div class="mx-auto">
+            <div class="rounded-xl bg-card/50 backdrop-blur-sm overflow-hidden">
               <TryAgentSection client:load />
             </div>
           </div>
@@ -247,24 +237,30 @@ const features = [
         </section>
 
         <!-- Footer -->
-        <footer class="py-12 px-6 border-t border-border bg-background">
+        <footer class="py-12 px-6 bg-background">
           <div
-            class="container mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6"
+            class="mx-auto flex flex-col md:flex-row justify-between items-center gap-6"
           >
-            <div class="text-sm text-muted-foreground">
-              © 2024 Viber. MIT License.
+            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+              <img src="/favicon.png" alt="Viber Logo" class="w-8 h-8" />
+              © {new Date().getFullYear()} Tiwater Team.
             </div>
             <div class="flex gap-6 text-sm font-medium">
+              <a
+                href="/playground/"
+                class="text-muted-foreground hover:text-foreground transition-colors"
+                >Playground</a
+              >
+              <a
+                href="/docs/"
+                class="text-muted-foreground hover:text-foreground transition-colors"
+                >Docs</a
+              >
               <a
                 href="https://github.com/tiwater/viber"
                 target="_blank"
                 class="text-muted-foreground hover:text-foreground transition-colors"
                 >GitHub</a
-              >
-              <a
-                href="/api/"
-                class="text-muted-foreground hover:text-foreground transition-colors"
-                >API</a
               >
             </div>
           </div>
