@@ -45,7 +45,7 @@
   }
 </script>
 
-<div class="relative mx-auto w-full max-w-3xl p-4">
+<div class="relative mx-auto w-full max-w-3xl">
   <div class="relative group">
     <textarea
       bind:this={textarea}
@@ -57,8 +57,8 @@
       rows={1}
       class={cn(
         "w-full resize-none rounded-2xl bg-background",
-        "pl-4 pr-12 pt-[14px] pb-[50px]",
-        "min-h-[80px] max-h-[200px]",
+        "pl-4 pr-12 pt-4 pb-12", // ChatGPT/Manus-like padding
+        "min-h-[80px] max-h-[150px]",
         "placeholder:text-muted-foreground/60",
         "transition-all duration-200",
         "border border-border", // Basic border
@@ -69,7 +69,7 @@
     ></textarea>
 
     <!-- Mode toggle -->
-    <div class="absolute left-3 bottom-2">
+    <div class="absolute left-3 bottom-4">
       <div class="flex items-center gap-1">
         <Button
           size="sm"
@@ -103,7 +103,7 @@
     </div>
 
     <!-- Send Button -->
-    <div class="absolute right-2 bottom-2">
+    <div class="absolute right-2 bottom-3">
       <Button
         size="icon"
         class="h-8 w-8 rounded-full"

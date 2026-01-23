@@ -1,42 +1,55 @@
 ---
 import Header from "../components/header.astro";
 import TryAgentSection from "../components/try-agent-section.svelte";
-import '../styles/playground.css';
-import { ChevronRight, Bot, Hammer, Box, Zap, Code2, Activity, ArrowRight } from "lucide-svelte";
+import "../styles/playground.css";
+import {
+  ChevronRight,
+  Bot,
+  Hammer,
+  Box,
+  Zap,
+  Code2,
+  Activity,
+  ArrowRight,
+} from "lucide-svelte";
 
 const title = "Viber | Agent Framework for Vibe Working";
 
 const features = [
   {
-    icon: "Bot",
+    Icon: Bot,
     title: "Multi-Agent System",
-    description: "Define and orchestrate multiple AI agents that collaborate to solve complex tasks."
+    description:
+      "Define and orchestrate multiple AI agents that collaborate to solve complex tasks.",
   },
   {
-    icon: "Hammer",
+    Icon: Hammer,
     title: "Tool Framework",
-    description: "Decorator-based tool definitions with full Zod schema validation."
+    description:
+      "Decorator-based tool definitions with full Zod schema validation.",
   },
   {
-    icon: "Box",
+    Icon: Box,
     title: "Space Management",
-    description: "Organize conversations, artifacts, and tasks in isolated workspaces."
+    description:
+      "Organize conversations, artifacts, and tasks in isolated workspaces.",
   },
   {
-    icon: "Zap",
+    Icon: Zap,
     title: "Reactive State",
-    description: "Zustand-based state management with real-time updates."
+    description: "Zustand-based state management with real-time updates.",
   },
   {
-    icon: "Code2",
+    Icon: Code2,
     title: "Framework Agnostic",
-    description: "Works seamlessly with React, Svelte, or vanilla JavaScript."
+    description: "Works seamlessly with React, Svelte, or vanilla JavaScript.",
   },
   {
-    icon: "Activity",
+    Icon: Activity,
     title: "Streaming Support",
-    description: "Built-in streaming for real-time AI responses and progress updates."
-  }
+    description:
+      "Built-in streaming for real-time AI responses and progress updates.",
+  },
 ];
 ---
 
@@ -47,11 +60,17 @@ const features = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <title>{title}</title>
-    <meta name="description" content="Viber - Multi-agent collaboration framework for vibe working" />
+    <meta
+      name="description"
+      content="Viber - Multi-agent collaboration framework for vibe working"
+    />
     <script is:inline>
       function initTheme() {
-        const theme = localStorage.getItem("starlight-theme") ||
-          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        const theme =
+          localStorage.getItem("starlight-theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
         document.documentElement.setAttribute("data-theme", theme);
         if (theme === "dark") {
           document.documentElement.classList.add("dark");
@@ -65,40 +84,65 @@ const features = [
       });
     </script>
   </head>
-  <body class="antialiased min-h-screen bg-background text-foreground selection:bg-cyan-500/30">
+  <body
+    class="antialiased min-h-screen bg-background text-foreground selection:bg-cyan-500/30"
+  >
     <div class="flex flex-col min-h-screen">
       <Header />
       <main class="flex-1 flex flex-col relative">
-
         <!-- Background Gradients -->
         <div class="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
-            <div class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-cyan-500/5 blur-[120px] mix-blend-screen dark:mix-blend-screen"></div>
-            <div class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-500/5 blur-[120px] mix-blend-screen dark:mix-blend-screen"></div>
+          <div
+            class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-cyan-500/5 blur-[120px] mix-blend-screen dark:mix-blend-screen"
+          >
+          </div>
+          <div
+            class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-500/5 blur-[120px] mix-blend-screen dark:mix-blend-screen"
+          >
+          </div>
         </div>
 
         <!-- Hero Section -->
         <section class="relative pt-32 pb-20 px-6">
           <div class="container mx-auto max-w-5xl text-center">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/50 bg-secondary/30 text-xs font-medium text-muted-foreground mb-8 backdrop-blur-sm">
-              <span class="flex h-2 w-2 rounded-full bg-cyan-500 animate-pulse"></span>
+            <div
+              class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/50 bg-secondary/30 text-xs font-medium text-muted-foreground mb-8 backdrop-blur-sm"
+            >
+              <span class="flex h-2 w-2 rounded-full bg-cyan-500 animate-pulse"
+              ></span>
               v1.0 is now available
             </div>
 
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
-              The <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">Agent Framework</span><br/> for Vibe Working
+            <h1
+              class="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70"
+            >
+              The <span
+                class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500"
+                >Agent Framework</span
+              ><br /> for Vibe Working
             </h1>
 
-            <p class="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-              Build, orchestrate, and deploy autonomous agents with ease.
-              A type-safe, reactive framework for the next generation of AI apps.
+            <p
+              class="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed"
+            >
+              Build, orchestrate, and deploy autonomous agents with ease. A
+              type-safe, reactive framework for the next generation of AI apps.
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a href="/getting-started/installation/" class="h-12 px-8 rounded-full bg-foreground text-background font-medium hover:opacity-90 transition-opacity flex items-center gap-2">
+            <div
+              class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
+              <a
+                href="/getting-started/installation/"
+                class="h-12 px-8 rounded-full bg-foreground text-background font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+              >
                 Get Started
                 <ArrowRight size={16} />
               </a>
-              <a href="/playground/" class="h-12 px-8 rounded-full border border-border bg-background/50 hover:bg-secondary/50 backdrop-blur-sm transition-colors flex items-center gap-2 font-medium">
+              <a
+                href="/playground/"
+                class="h-12 px-8 rounded-full border border-border bg-background/50 hover:bg-secondary/50 backdrop-blur-sm transition-colors flex items-center gap-2 font-medium"
+              >
                 Try Playground
               </a>
             </div>
@@ -108,9 +152,11 @@ const features = [
         <!-- Try Agent Section (Interactive) -->
         <section class="py-12 px-6">
           <div class="container mx-auto max-w-5xl">
-             <div class="rounded-xl border border-border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden">
-                <TryAgentSection client:load />
-             </div>
+            <div
+              class="rounded-xl border border-border bg-card/50 backdrop-blur-sm shadow-sm overflow-hidden"
+            >
+              <TryAgentSection client:load />
+            </div>
           </div>
         </section>
 
@@ -125,23 +171,27 @@ const features = [
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((feature) => {
-                const Icon = {
-                  Bot, Hammer, Box, Zap, Code2, Activity
-                }[feature.icon];
-                
-                return (
-                  <div class="group p-6 rounded-2xl border border-border/50 bg-card/30 hover:border-border/80 hover:bg-card/50 transition-all duration-300">
-                    <div class="h-12 w-12 rounded-xl bg-secondary/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                      <div class="text-cyan-500 dark:text-cyan-400">
-                        <Icon size={24} />
+              {
+                features.map((feature) => {
+                  const Icon = feature.Icon;
+
+                  return (
+                    <div class="group p-6 rounded-2xl border border-border/50 bg-card/30 hover:border-border/80 hover:bg-card/50 transition-all duration-300">
+                      <div class="h-12 w-12 rounded-xl bg-secondary/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <div class="text-cyan-500 dark:text-cyan-400">
+                          <Icon size={24} />
+                        </div>
                       </div>
+                      <h3 class="text-lg font-semibold mb-2">
+                        {feature.title}
+                      </h3>
+                      <p class="text-muted-foreground leading-relaxed text-sm">
+                        {feature.description}
+                      </p>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">{feature.title}</h3>
-                    <p class="text-muted-foreground leading-relaxed text-sm">{feature.description}</p>
-                  </div>
-                );
-              })}
+                  );
+                })
+              }
             </div>
           </div>
         </section>
@@ -149,22 +199,34 @@ const features = [
         <!-- Quick Start -->
         <section class="py-24 px-6 border-t border-border/40 bg-secondary/5">
           <div class="container mx-auto max-w-4xl">
-             <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="flex-1 text-center md:text-left">
-                  <h2 class="text-3xl font-bold mb-4">Start building in seconds</h2>
-                  <p class="text-muted-foreground mb-8">
-                    Install the package and create your first agent with just a few lines of code. No complex configuration required.
-                  </p>
-                  <a href="/getting-started/quick-start/" class="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-400 font-medium transition-colors">
-                    Read the full guide
-                    <ArrowRight size={16} />
-                  </a>
-                </div>
+            <div class="flex flex-col md:flex-row items-center gap-12">
+              <div class="flex-1 text-center md:text-left">
+                <h2 class="text-3xl font-bold mb-4">
+                  Start building in seconds
+                </h2>
+                <p class="text-muted-foreground mb-8">
+                  Install the package and create your first agent with just a
+                  few lines of code. No complex configuration required.
+                </p>
+                <a
+                  href="/getting-started/quick-start/"
+                  class="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-400 font-medium transition-colors"
+                >
+                  Read the full guide
+                  <ArrowRight size={16} />
+                </a>
+              </div>
 
-                <div class="flex-1 w-full max-w-lg">
-                  <div class="rounded-xl border border-border bg-[#0d1117] p-6 shadow-2xl overflow-hidden relative group">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-purple-500"></div>
-                    <pre class="font-mono text-sm leading-relaxed overflow-x-auto">
+              <div class="flex-1 w-full max-w-lg">
+                <div
+                  class="rounded-xl border border-border bg-[#0d1117] p-6 shadow-2xl overflow-hidden relative group"
+                >
+                  <div
+                    class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-purple-500"
+                  >
+                  </div>
+                  <pre
+                    class="font-mono text-sm leading-relaxed overflow-x-auto">
 <code class="text-gray-300"><span class="text-cyan-400">pnpm</span> add viber
 
 <span class="text-purple-400">import</span> {"{"} Agent, Space {"}"} <span class="text-purple-400">from</span> <span class="text-green-400">'viber'</span>;
@@ -178,25 +240,35 @@ const features = [
 <span class="text-purple-400">const</span> result = <span class="text-purple-400">await</span> agent.<span class="text-blue-400">streamText</span>({"{"}
   messages: [{"{"} role: <span class="text-green-400">'user'</span>, content: <span class="text-green-400">'Hello!'</span> {"}"}]
 {"}"});</code></pre>
-                  </div>
                 </div>
-             </div>
+              </div>
+            </div>
           </div>
         </section>
 
         <!-- Footer -->
         <footer class="py-12 px-6 border-t border-border bg-background">
-          <div class="container mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6">
+          <div
+            class="container mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6"
+          >
             <div class="text-sm text-muted-foreground">
               © 2024 Viber. MIT License.
             </div>
             <div class="flex gap-6 text-sm font-medium">
-               <a href="https://github.com/tiwater/viber" target="_blank" class="text-muted-foreground hover:text-foreground transition-colors">GitHub</a>
-               <a href="/api/" class="text-muted-foreground hover:text-foreground transition-colors">API</a>
+              <a
+                href="https://github.com/tiwater/viber"
+                target="_blank"
+                class="text-muted-foreground hover:text-foreground transition-colors"
+                >GitHub</a
+              >
+              <a
+                href="/api/"
+                class="text-muted-foreground hover:text-foreground transition-colors"
+                >API</a
+              >
             </div>
           </div>
         </footer>
-
       </main>
     </div>
   </body>

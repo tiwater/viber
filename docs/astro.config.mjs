@@ -21,6 +21,9 @@ export default defineConfig({
       social: [
         { icon: 'github', label: 'GitHub', href: 'https://github.com/tiwater/viber' },
       ],
+      customCss: [
+        './src/styles/starlight-overrides.css',
+      ],
       head: [],
       components: {
         Header: './src/components/header.astro',
@@ -75,10 +78,6 @@ export default defineConfig({
             { label: 'Task Lifecycle', slug: 'design/task-lifecycle' },
             { label: 'Tool Execution', slug: 'design/tool-execution' },
           ],
-        },
-        {
-          label: 'Playground',
-          link: '/playground',
         },
       ],
 

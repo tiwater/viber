@@ -1,0 +1,11 @@
+/* Minimal overrides for Starlight docs pages - navbar consistency */
+
+/* Override Starlight's header wrapper styling for consistent navbar */
+.page>.header {
+  padding: 0 !important;
+  padding-inline-end: 0 !important;
+}
+
+[data-has-sidebar] .header {
+  padding-inline-end: 0 !important;
+}

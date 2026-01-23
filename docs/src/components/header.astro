@@ -3,7 +3,7 @@
  * Shared Header Component
  * Used across Home, Playground, and Docs pages for consistent navigation
  */
-import ThemeToggle from './theme-toggle.svelte';
+import ThemeToggle from "./theme-toggle.svelte";
 
 interface Props {
   currentPath?: string;
@@ -13,8 +13,8 @@ const currentPath = Astro.url.pathname;
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/getting-started/installation/", label: "Docs" },
   { href: "/playground/", label: "Playground" },
+  { href: "/getting-started/installation/", label: "Docs" },
 ];
 
 function isActive(href: string, current: string): boolean {
@@ -35,8 +35,13 @@ function isActive(href: string, current: string): boolean {
           navLinks.map((link) => (
             <a
               href={link.href}
-              class:list={["nav-link", { active: isActive(link.href, currentPath) }]}
-              aria-current={isActive(link.href, currentPath) ? "page" : undefined}
+              class:list={[
+                "nav-link",
+                { active: isActive(link.href, currentPath) },
+              ]}
+              aria-current={
+                isActive(link.href, currentPath) ? "page" : undefined
+              }
             >
               {link.label}
             </a>
@@ -70,16 +75,21 @@ function isActive(href: string, current: string): boolean {
     z-index: 100;
     width: 100%;
     height: 4rem; /* Fixed height 64px */
+    padding: 0; /* Override Starlight's default nav padding */
     border-bottom: 1px solid var(--sl-color-hairline);
 
     /* Vercel-like blur effect */
-    background-color: color-mix(in srgb, var(--sl-color-bg-nav), transparent 15%);
+    background-color: color-mix(
+      in srgb,
+      var(--sl-color-bg-nav),
+      transparent 15%
+    );
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
   }
 
   .header-inner {
-    max-width: var(--sl-content-width, 1400px); /* Use Starlight variable or fallback */
+    max-width: 100%; /* Full-width header, consistent across all pages */
     margin: 0 auto;
     padding: 0 1.5rem;
     height: 100%;
@@ -155,10 +165,10 @@ function isActive(href: string, current: string): boolean {
 
   /* In dark mode, ensure contrast is good */
   :global([data-theme="dark"]) .nav-link:hover {
-     background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
   }
   :global([data-theme="light"]) .nav-link:hover {
-     background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(0, 0, 0, 0.05);
   }
 
   .header-right {
@@ -177,5 +187,40 @@ function isActive(href: string, current: string): boolean {
 
   .github-link:hover {
     color: var(--sl-color-text);
+  }
+
+  /* Theme toggle button styles */
+  .header-right :global(button) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.375rem;
+    background: transparent;
+    border: none;
+    color: var(--sl-color-gray-3);
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+
+  /* Consistent icon size */
+  .header-right :global(button svg) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .header-right :global(button:hover) {
+    color: var(--sl-color-text);
+  }
+
+  :global([data-theme="dark"]) .header-right :global(button:hover) {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  :global([data-theme="light"]) .header-right :global(button:hover) {
+    background-color: rgba(0, 0, 0, 0.05);
   }
 </style>

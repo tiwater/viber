@@ -34,6 +34,8 @@
 
 :root {
   /* Starlight overrides */
+  --sl-nav-pad-y: 0 !important;
+  /* Remove default navbar vertical padding */
   --sl-color-gray-6: #475569;
   --sl-color-hairline: #e2e8f0;
   --sl-color-accent: #3b82f6;
@@ -147,4 +149,14 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Override Starlight's header wrapper styling for consistent navbar */
+.page>.header {
+  padding: 0 !important;
+  padding-inline-end: 0 !important;
+}
+
+[data-has-sidebar] .header {
+  padding-inline-end: 0 !important;
 }

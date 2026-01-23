@@ -27,6 +27,13 @@
     }
     localStorage.setItem("starlight-theme", newTheme);
     theme = newTheme;
+
+    // Dispatch Starlight's theme change event for proper sync
+    document.dispatchEvent(
+      new CustomEvent("starlight-theme-change", {
+        detail: { theme: newTheme },
+      }),
+    );
   }
 
   function toggleTheme() {
@@ -37,7 +44,7 @@
 
 <button
   onclick={toggleTheme}
-  class="relative inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-background hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+  class="relative inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-muted transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
   aria-label="Toggle theme"
 >
   {#if theme === "light"}
