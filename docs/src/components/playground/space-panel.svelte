@@ -127,7 +127,7 @@
     width: 320px;
     min-width: 320px;
     height: 100%;
-    border-left: 1px solid var(--sl-color-gray-5);
+    border-left: 1px solid var(--sl-color-hairline);
     background: var(--sl-color-bg);
     transition:
       width 0.2s ease,
@@ -144,7 +144,7 @@
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--sl-color-gray-5);
+    border-bottom: 1px solid var(--sl-color-hairline);
     background: var(--sl-color-bg-nav);
   }
 
@@ -282,7 +282,7 @@
   }
 
   .preview-section {
-    border-top: 1px solid var(--sl-color-gray-5);
+    border-top: 1px solid var(--sl-color-hairline);
     max-height: 40%;
     display: flex;
     flex-direction: column;
@@ -294,7 +294,7 @@
     justify-content: space-between;
     padding: 0.5rem 0.75rem;
     background: var(--sl-color-bg-nav);
-    border-bottom: 1px solid var(--sl-color-gray-5);
+    border-bottom: 1px solid var(--sl-color-hairline);
   }
 
   .preview-title {

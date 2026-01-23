@@ -3,7 +3,7 @@
   import { playgroundStore } from "$lib/stores/playground-store";
   import ChatZone from "./chat-zone.svelte";
   import SpacePanel from "./space-panel.svelte";
-  import { Trash2, FolderOpen } from "lucide-svelte";
+  import { Trash2 } from "lucide-svelte";
 
   let isLoading = $state(false);
 
@@ -163,20 +163,14 @@
 <div class="playground-layout">
   <!-- Chat Zone -->
   <div class="main-area">
-    <div class="toolbar">
-      <div class="toolbar-title">
-        <FolderOpen size={16} />
-        <span>Playground Space</span>
-      </div>
-      <button
-        class="clear-btn"
-        onclick={handleClearSpace}
-        title="Clear workspace"
-      >
-        <Trash2 size={14} />
-        Clear
-      </button>
-    </div>
+    <button
+      class="clear-btn"
+      onclick={handleClearSpace}
+      title="Clear workspace"
+    >
+      <Trash2 size={14} />
+      Clear
+    </button>
     <ChatZone onSendMessage={handleSendMessage} {isLoading} />
   </div>
 
@@ -197,42 +191,31 @@
     flex-direction: column;
     min-width: 0;
     overflow: hidden;
-  }
-
-  .toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid var(--sl-color-gray-5);
-    background: var(--sl-color-bg-nav);
-  }
-
-  .toolbar-title {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--sl-color-text);
+    position: relative;
   }
 
   .clear-btn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 10;
     display: flex;
     align-items: center;
     gap: 0.375rem;
     padding: 0.375rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 500;
-    color: var(--sl-color-gray-2);
-    background: transparent;
-    border: 1px solid var(--sl-color-gray-5);
+    color: var(--sl-color-gray-4);
+    background: var(--sl-color-bg-nav);
+    border: 1px solid var(--sl-color-hairline);
     border-radius: 0.375rem;
     cursor: pointer;
     transition: all 0.15s ease;
+    opacity: 0.7;
   }
 
   .clear-btn:hover {
+    opacity: 1;
     color: oklch(0.577 0.245 27.325);
     border-color: oklch(0.577 0.245 27.325 / 0.5);
     background: oklch(0.577 0.245 27.325 / 0.1);
@@ -249,7 +232,7 @@
       min-width: 100%;
       height: 40%;
       border-left: none;
-      border-top: 1px solid var(--sl-color-gray-5);
+      border-top: 1px solid var(--sl-color-hairline);
     }
   }
 </style>

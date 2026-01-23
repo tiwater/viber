@@ -1,7 +1,7 @@
 <script lang="ts">
   import { playgroundStore, type Message } from "$lib/stores/playground-store";
   import ChatInput from "../chat-input.svelte";
-  import { Bot, User, Sparkles } from "lucide-svelte";
+  import { User, Sparkles } from "lucide-svelte";
 
   interface Props {
     onSendMessage: (content: string) => void;
@@ -63,13 +63,11 @@
           class:user={message.role === "user"}
           class:assistant={message.role === "assistant"}
         >
-          <div class="message-avatar">
-            {#if message.role === "user"}
+          {#if message.role === "user"}
+            <div class="message-avatar">
               <User size={16} />
-            {:else}
-              <Bot size={16} />
-            {/if}
-          </div>
+            </div>
+          {/if}
           <div class="message-content">
             <div class="message-header">
               <span class="message-role">
@@ -84,9 +82,6 @@
       <!-- Streaming message -->
       {#if space.isStreaming}
         <div class="message assistant streaming">
-          <div class="message-avatar">
-            <Bot size={16} />
-          </div>
           <div class="message-content">
             <div class="message-header">
               <span class="message-role">Assistant</span>
@@ -208,9 +203,10 @@
 
   .message {
     display: flex;
-    gap: 1rem;
-    max-width: 90%;
+    gap: 0.75rem;
+    max-width: 100%;
     animation: fadeIn 0.2s ease;
+    align-self: flex-start;
   }
 
   @keyframes fadeIn {
@@ -225,12 +221,11 @@
   }
 
   .message.user {
-    align-self: flex-end;
-    flex-direction: row-reverse;
+    /* Left aligned like assistant */
   }
 
   .message.assistant {
-    align-self: flex-start;
+    /* Left aligned */
   }
 
   .message-avatar {
@@ -275,11 +270,7 @@
   .message-role {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--sl-color-gray-2);
-  }
-
-  .message.user .message-header {
-    justify-content: flex-end;
+    color: var(--sl-color-gray-4);
   }
 
   .streaming-indicator {
@@ -367,8 +358,7 @@
 
   /* Input Container */
   .input-container {
-    padding: 1rem 1.5rem 1.5rem;
-    border-top: 1px solid var(--sl-color-gray-5);
+    padding: 1rem 1rem 1.5rem;
     background: var(--sl-color-bg);
   }
 </style>
