@@ -63,17 +63,16 @@ export function getModelProvider(config: ModelConfig) {
       return deepseek;
 
     case "openrouter":
-      // Route through Helicone gateway if API key is configured
+      // Use the official OpenRouter SDK (v2.0.2+ for AI SDK 6 compatibility)
       const openrouterConfig: any = {
         apiKey: apiKey || process.env.OPENROUTER_API_KEY,
       };
 
-      // Use Helicone gateway for observability
+      // Use Helicone gateway for observability if configured
       if (process.env.HELICONE_API_KEY) {
         openrouterConfig.baseURL = baseURL || "https://openrouter.helicone.ai/api/v1";
         openrouterConfig.headers = {
           "Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
-          // Add user and space tracking for better analytics
           "Helicone-Property-User": userId || "anonymous",
           "Helicone-Property-Space": spaceId || "default",
         };

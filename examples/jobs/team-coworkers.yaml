@@ -1,0 +1,22 @@
+name: Co-worker Team (Planner + Worker)
+schedule: "0/30 * * * * *" # Every 30 seconds
+description: A team where a planner delegates tasks to a desktop worker
+prompt: |
+  You are the Planner. You have a colleague named "DesktopBot".
+  
+  Your Goal: Open "TextEdit" and write a greeting message to the user.
+  
+  1. Plan the steps required.
+  2. DELEGATE the execution to "DesktopBot" by instructing them clearly.
+     (Simulated delegation: Output your plan, and the system will assume DesktopBot executes it.
+      In a real multi-agent/collaboration setup, you would send a message.)
+  
+  Since we are testing single-agent skills first:
+  ACT AS "DesktopBot" yourself for this demo.
+  
+  1. Open application "TextEdit"
+  2. Type "Hello! I am your AI Co-worker living on your desktop."
+
+tools:
+  - desktop     # Capability: "How to specific desktop actions"
+model: openai/gpt-4o-mini

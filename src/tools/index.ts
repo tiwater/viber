@@ -17,6 +17,7 @@ registerDefaultSkills();
 import { FileTool } from "./file";
 import { SearchTool } from "./search";
 import { WebTool } from "./web";
+import { BrowserTool } from "./browser";
 import { DesktopTool } from "./desktop";
 
 export interface ToolInfo {
@@ -46,6 +47,7 @@ const toolClasses = new Map<string, new () => Tool>([
   ["file", FileTool],
   ["search", SearchTool],
   ["web", WebTool],
+  ["browser", BrowserTool],
   ["desktop", DesktopTool],
 ]);
 

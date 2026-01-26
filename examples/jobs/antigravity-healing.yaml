@@ -1,0 +1,14 @@
+name: Antigravity Healer (Refined)
+description: Uses the Antigravity Domain Skill to maintain system health.
+schedule: "*/3 * * * * *"
+skills:
+  - antigravity   # Knowledge: "How to heal"
+tools:
+  - browser       # Capability: "How to execute"
+model: openai/gpt-4o-mini
+prompt: |
+  You are utilizing the "Antigravity" skill.
+  
+  MISSION:
+  Monitor the browser for the critical "Agent Terminated" error described in your training.
+  If detected, execute the standard Recovery Procedure immediately.

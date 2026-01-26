@@ -25,6 +25,7 @@ export interface AgentConfig {
   };
   systemPrompt?: string;
   tools?: string[];
+  skills?: string[];
   personality?: string;
   temperature?: number;
   maxTokens?: number;
