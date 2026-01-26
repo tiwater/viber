@@ -127,15 +127,26 @@ export class Task {
     this.updatedAt = new Date();
   }
 
-  isActionable(): boolean {
+  isActionable(context?: { getTaskStatus: (id: string) => TaskStatus | undefined }): boolean {
     return (
-      this.status === TaskStatus.PENDING && !this.hasBlockingDependencies()
+      this.status === TaskStatus.PENDING && !this.hasBlockingDependencies(context)
     );
   }
 
-  hasBlockingDependencies(): boolean {
-    // In a real implementation, this would check if required dependencies are complete
-    return false;
+  hasBlockingDependencies(context?: { getTaskStatus: (id: string) => TaskStatus | undefined }): boolean {
+    if (!context || !this.dependencies || this.dependencies.length === 0) {
+      return false;
+    }
+
+    return this.dependencies.some((dep) => {
+      // Only required dependencies block execution
+      if (dep.type === "optional") return false;
+
+      const status = context.getTaskStatus(dep.taskId);
+      // Block if dependency is not completed (or cancelled/failed if strict, but let's say COMPLETED)
+      // If status is undefined (task not found), we assume it's missing -> blocking
+      return status !== TaskStatus.COMPLETED;
+    });
   }
 
   private calculateDuration(start: Date, end: Date): string {

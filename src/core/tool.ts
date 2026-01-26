@@ -121,7 +121,7 @@ async function loadMcpTools(ids: string[]): Promise<Record<string, CoreTool>> {
  * Check if an object is a valid tool
  */
 export function isValidTool(obj: any): boolean {
-  return (
+  return !!(
     obj &&
     typeof obj === "object" &&
     typeof obj.execute === "function" &&

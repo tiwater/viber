@@ -58,11 +58,19 @@ export class Plan {
   }
 
   getNextActionableTask(): Task | undefined {
-    return this.tasks.find((task) => task.isActionable());
+    return this.tasks.find((task) =>
+      task.isActionable({
+        getTaskStatus: (id) => this.getTaskById(id)?.status,
+      })
+    );
   }
 
   getAllActionableTasks(maxTasks?: number): Task[] {
-    const actionableTasks = this.tasks.filter((task) => task.isActionable());
+    const actionableTasks = this.tasks.filter((task) =>
+      task.isActionable({
+        getTaskStatus: (id) => this.getTaskById(id)?.status,
+      })
+    );
     return maxTasks ? actionableTasks.slice(0, maxTasks) : actionableTasks;
   }
 
