@@ -196,8 +196,7 @@ export class SpaceStorageFactory {
       // Only use LocalStorageAdapter on server
       if (typeof window === 'undefined') {
         // Dynamic import to avoid bundling fs in client
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
-        const { LocalStorageAdapter } = require("./adapters/local");
+        const { LocalStorageAdapter } = await import("./adapters/local");
         adapter = new LocalStorageAdapter();
         const baseRoot = SpaceStorageFactory.rootPath || SpaceStorageFactory.getRootPath();
         rootPath = path.join(baseRoot, "spaces", spaceId);
