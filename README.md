@@ -4,7 +4,7 @@
 
 **The app container that runs things.**
 
-Runs apps that enhance your AI coding workflow. Some built-in, more to discover.
+Apps for your AI coding workflow. Built-in essentials. Community extensions. One command.
 
 ## Quick Start
 
