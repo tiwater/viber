@@ -44,6 +44,14 @@ viber start --server wss://your-server.com --token TOKEN
 viber start --disable-app antigravity-healing
 ```
 
+## Architecture
+
+### Skills
+General-purpose building blocks. Reusable capabilities like browser control, file access, or CDP connections.
+
+### Apps
+Scenario-specific logic built on top of skills. Like `antigravity-healing` which uses CDP skills to monitor and recover from errors.
+
 ## Built-in Apps
 
 | App | Description |
