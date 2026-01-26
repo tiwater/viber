@@ -1,92 +1,269 @@
 ---
 title: "Framework Comparison"
-description: Compare Viber with other multi-agent frameworks
+description: Compare Viber with other agent frameworks through the lens of vibe-working
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
 
-## Viber vs. Other Frameworks
+## Understanding the Vibe-Working Paradigm
 
-### Feature Comparison
+Viber is built for **vibe-working**—a collaborative paradigm where humans and AI agents work together through natural language to accomplish complex tasks. This is distinct from traditional automation or prompt engineering.
 
-| Feature | Viber | LangChain | AutoGen | CrewAI |
-|---------|-------|-----------|---------|--------|
-| **Language** | TypeScript | Python/JS | Python | Python |
-| **Streaming** | Native | Partial | Limited | Limited |
-| **React/Svelte** | Built-in | Community | None | None |
-| **Tool Schema** | Zod | Pydantic | Custom | Pydantic |
-| **Multi-Agent** | ✓ | ✓ | ✓ | ✓ |
-| **Type Safety** | Full | Partial | Partial | Partial |
-
-### When to Choose Viber
-
-<Aside type="tip">
-  Viber is ideal for TypeScript-first teams building interactive AI applications.
+<Aside type="note">
+  **Vibe-working** isn't about automating humans away. It's about creating a persistent, transparent, and interruptible collaboration where the human remains the strategic pilot while AI handles execution.
 </Aside>
 
-**Choose Viber when you need:**
+The term "vibe coding" was coined by Andrej Karpathy:
 
-- 🎯 **TypeScript-first development** with full type safety
-- ⚡ **Real-time streaming** with React or Svelte
-- 🔧 **Zod-based tool schemas** for runtime validation
-- 📦 **Lightweight footprint** without heavy dependencies
-- 🎨 **UI framework integration** out of the box
+> *"It's not really coding – I just see things, say things, run things, and copy-paste things, and it mostly works."*
 
-**Consider alternatives when:**
+Viber extends this insight beyond coding to **all knowledge work**: writing, research, analysis, and operations.
 
-- You're working in a Python-only environment
-- You need extensive pre-built agent chains
-- You require specific enterprise integrations
+---
 
-## Philosophy Differences
+## The Gold Standard: Claude Code's Pattern
 
-### Viber: Composable Primitives
+Before comparing frameworks, it's worth examining **Claude Code** as an exemplar of the vibe-working pattern done right. While Claude Code is a coding tool (not a framework for building applications), its architecture embodies the principles Viber strives to enable:
+
+### What Makes Claude Code's Pattern Ideal
+
+| Principle | Claude Code Implementation | Viber Equivalent |
+|-----------|---------------------------|------------------|
+| **Persistent State** | Session history, project context | Memory & Workspace |
+| **Transparency** | Streams thinking, tool usage | Transparent Feedback Loop |
+| **Interruptibility** | Human can guide mid-task | Jump-in Moments |
+| **Unix Philosophy** | Composable, scriptable | Pipeline-friendly API |
+| **Natural Language** | Conversational interface | XAgent "just talk" pattern |
+
+```bash
+# Claude Code: The vibe-working pattern in action
+claude -p "Summarize changes and draft release notes"
+
+# Scriptable and composable
+cat document.md | claude -p "Extract action items" | claude -p "Prioritize by urgency"
+```
+
+<Aside type="tip">
+  **Claude Cowork** extends this pattern to team collaboration—multiple humans and AI agents working together with shared context and handoffs. This represents the future direction of vibe-working.
+</Aside>
+
+### Key Lessons from Claude Code
+
+1. **State is Everything**: Without persistent context, every interaction starts from zero
+2. **Transparency Builds Trust**: Seeing the AI's reasoning enables course correction
+3. **Interruptibility Preserves Control**: The human must be able to intervene at any point
+4. **Simplicity Wins**: One interface (`claude`) for everything, not a complex API
+
+---
+
+## Framework Comparison
+
+Viber's primary use case is building **document and content-focused agent applications**—not code editors or IDEs. Here's how it compares to relevant alternatives:
+
+### Document & Content Agent Frameworks
+
+| Feature | Viber | LangGraph | CrewAI | AutoGen |
+|---------|-------|-----------|--------|---------|
+| **Language** | TypeScript | Python | Python | Python |
+| **Primary Focus** | Vibe-working (docs, content) | Agent graphs | Role-based teams | Conversations |
+| **Streaming** | ✓ Native (React/Svelte) | ✓ | Limited | Limited |
+| **Persistent State** | ✓ Memory + Workspace | ✓ Checkpoints | Limited | Limited |
+| **UI Integration** | Built-in hooks | Separate | None | None |
+| **Multi-Agent** | ✓ Spaces | ✓ | ✓ | ✓ |
+| **Interruptibility** | ✓ First-class | ✓ | Limited | Limited |
+| **Type Safety** | Full (Zod) | Partial | Partial | Partial |
+
+### General-Purpose Agent Frameworks
+
+| Feature | Viber | OpenManus | Eko |
+|---------|-------|-----------|-----|
+| **Language** | TypeScript | Python | TypeScript |
+| **Philosophy** | Vibe-working | Autonomous execution | Workflow automation |
+| **Browser Automation** | Tool-based | ✓ Built-in | ✓ Core feature |
+| **MCP Support** | ✓ Extensible | ✓ Native | ✓ Native |
+| **Human-in-the-loop** | ✓ Core principle | Limited | ✓ |
+| **Embeddable** | ✓ Full SDK | CLI/Web UI | Multi-environment |
+| **Target Users** | Product builders | Power users | Workflow automators |
+
+---
+
+## Philosophy Comparison
+
+### Viber: State-Focused Collaboration
+
+Viber is built on the belief that **persistent state** is the foundation of effective human-AI collaboration:
 
 ```typescript
-// Viber emphasizes composition
-const agent = new Agent({ tools: [myTool] });
-const result = await agent.streamText({ messages });
+// Start a collaboration
+const xAgent = await XAgent.start("Research market trends for Q1");
+
+// Continue the conversation naturally
+await xAgent.streamText({
+  messages: [{ role: "user", content: "Focus on the Asia-Pacific region" }]
+});
+
+// Resume anytime—state persists
+const xAgent = await XAgent.resume("space_abc123");
+await xAgent.streamText({
+  messages: [{ role: "user", content: "Now draft an executive summary" }]
+});
 ```
 
-### LangChain: Chain-Based
+**Key differentiator**: XAgent manages all internal state. No projects, tasks, or plans to manage—just conversation.
+
+### OpenManus: Autonomous Execution
+
+OpenManus (from the MetaGPT team) focuses on **autonomous task completion**:
 
 ```python
-# LangChain uses chains and abstractions
-chain = LLMChain(llm=llm, prompt=prompt)
-result = chain.run(input)
+# OpenManus: Goal-oriented execution
+python main.py
+> "Research the latest AI frameworks and write a comparison report"
+# Agent browses, reads, synthesizes, and delivers
 ```
 
-### AutoGen: Conversation-Centric
+**Strength**: Minimal human intervention required.  
+**Trade-off**: Less control over intermediate steps.
+
+### Eko: Workflow Automation
+
+Eko excels at **multi-step workflow orchestration** across environments:
+
+```typescript
+// Eko: Workflow automation
+const eko = new Eko({ llms, agents: [new BrowserAgent(), new FileAgent()] });
+await eko.run("Download quarterly reports from the finance portal and summarize");
+```
+
+**Strength**: Cross-environment execution (browser, Node.js, extensions).  
+**Trade-off**: More infrastructure-focused than content-focused.
+
+### LangGraph: Explicit Control Flow
+
+LangGraph provides **graph-based agent orchestration** with checkpointing:
 
 ```python
-# AutoGen focuses on agent conversations
-agent.initiate_chat(recipient, message)
+# LangGraph: Graph-based control flow
+graph = StateGraph()
+graph.add_node("research", research_node)
+graph.add_node("write", write_node)
+graph.add_edge("research", "write")
 ```
+
+**Strength**: Fine-grained control over agent flow.  
+**Trade-off**: More complex API, requires explicit graph design.
+
+---
+
+## When to Choose What
+
+<Tabs>
+  <TabItem label="Choose Viber">
+    **Viber is ideal when:**
+    
+    - Building document/content-focused applications
+    - Need React/Svelte UI integration
+    - Want the "just talk to X" simplicity
+    - TypeScript-first with full type safety
+    - Prioritizing persistent, resumable sessions
+    - Building products where end-users interact with AI
+  </TabItem>
+  <TabItem label="Choose LangGraph">
+    **LangGraph is ideal when:**
+    
+    - Need explicit control over agent orchestration
+    - Python ecosystem required
+    - Building complex multi-step reasoning pipelines
+    - Want fine-grained checkpointing and replay
+  </TabItem>
+  <TabItem label="Choose OpenManus">
+    **OpenManus is ideal when:**
+    
+    - Need autonomous, end-to-end task execution
+    - Browser automation is required
+    - Python environment preferred
+    - Minimal human intervention desired
+  </TabItem>
+  <TabItem label="Choose Eko">
+    **Eko is ideal when:**
+    
+    - Building cross-environment workflows
+    - Need browser extension integration
+    - Workflow automation is the primary focus
+    - Want pause/resume/interrupt controls
+  </TabItem>
+</Tabs>
+
+---
+
+## The Viber Difference: Built for Vibe-Working
+
+While other frameworks focus on automation or orchestration, Viber is specifically designed for the **vibe-working pattern**:
+
+| Vibe-Working Principle | How Viber Implements It |
+|------------------------|-------------------------|
+| **Persistent Memory** | Workspace + Memory dual-store |
+| **Transparent Process** | Real-time streaming of agent reasoning |
+| **Interruptible Tasks** | Jump-in moments for human guidance |
+| **Natural Conversation** | XAgent as single conversational interface |
+| **Economic Sustainability** | Cost-aware routing to appropriate models |
+
+### The Three Workflows
+
+Viber is optimized for the three fundamental knowledge work patterns:
+
+1. **📝 Vibe-Writing**: From idea to document (research, drafting, revision)
+2. **💻 Vibe-Coding**: From requirement to implementation (architecture, code, tests)
+3. **🚀 Vibe-Operating**: From insight to impact (executing in the real world)
+
+Each workflow has a distinct rhythm, and Viber provides tailored experiences for each.
+
+---
 
 ## Migration Guides
 
-### From LangChain
+### From LangChain/LangGraph
 
 ```typescript
-// LangChain (Python)
+// LangChain: Tool definition
 // tool = StructuredTool.from_function(func, args_schema=Schema)
 
-// Viber
-const tool = tool({
-  name: 'my_tool',
-  parameters: z.object({ input: z.string() }),
-  execute: async (params) => { /* ... */ },
+// Viber: Zod-based tool schema
+import { tool } from 'viber';
+import { z } from 'zod';
+
+const researchTool = tool({
+  name: 'web_research',
+  description: 'Research a topic on the web',
+  parameters: z.object({ query: z.string() }),
+  execute: async ({ query }) => { /* ... */ },
 });
 ```
 
 ### From Vercel AI SDK
 
-Viber builds on top of the Vercel AI SDK patterns:
+Viber builds on Vercel AI SDK patterns, making migration straightforward:
 
 ```typescript
 // Vercel AI SDK
 import { streamText } from 'ai';
 
-// Viber (compatible API)
+// Viber (compatible API with agent extensions)
 import { streamText } from 'viber';
+// Same patterns work, with added agent capabilities
+```
+
+### From CrewAI
+
+```python
+# CrewAI: Role-based crew definition
+# researcher = Agent(role="Researcher", goal="Find information")
+# crew = Crew(agents=[researcher, writer], tasks=[...])
+```
+
+```typescript
+// Viber: XAgent manages the team internally
+const xAgent = await XAgent.start("Research and write a report");
+// XAgent automatically delegates to specialist agents
+// No need to define roles explicitly
 ```

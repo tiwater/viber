@@ -3,7 +3,8 @@
  * Minimal layout for the Playground page
  * Uses Starlight's theme system for consistent theming
  */
-import '../styles/playground.css';
+import "../styles/global.css";
+import "../styles/playground.css";
 
 import Header from "../components/header.astro";
 
@@ -29,8 +30,11 @@ const currentPath = Astro.url.pathname;
     <script is:inline>
       // Sync theme with Starlight's theme system
       function initTheme() {
-        const theme = localStorage.getItem("starlight-theme") ||
-          (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        const theme =
+          localStorage.getItem("starlight-theme") ||
+          (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
         document.documentElement.setAttribute("data-theme", theme);
         if (theme === "dark") {
           document.documentElement.classList.add("dark");
@@ -47,7 +51,7 @@ const currentPath = Astro.url.pathname;
           initTheme();
         }
       });
-      
+
       // Listen for theme changes from same page (custom event if we implemented a toggler)
       // For now, this is enough to respect the user's preference from the docs site.
     </script>
@@ -93,7 +97,7 @@ const currentPath = Astro.url.pathname;
 
   main {
     flex: 1;
-    overflow: auto; 
+    overflow: auto;
     /* Allow scrolling inside main if content overflows */
   }
 </style>

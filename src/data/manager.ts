@@ -700,7 +700,15 @@ export class ViberDataManager {
   ): Promise<string> {
     const storage = await this.getSpaceStorage(spaceId);
     const storageKey = `artifacts/${artifactId}/${filename}`;
-    await storage.saveFile(storageKey, file);
+
+    if (file instanceof Blob) {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      await storage.saveFileBuffer(storageKey, buffer);
+    } else {
+      await storage.saveFile(storageKey, file);
+    }
+
     return storageKey;
   }
 

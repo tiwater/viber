@@ -22,6 +22,7 @@ export default defineConfig({
         { icon: 'github', label: 'GitHub', href: 'https://github.com/tiwater/viber' },
       ],
       customCss: [
+        './src/styles/global.css',
         './src/styles/starlight-overrides.css',
       ],
       head: [],
@@ -34,6 +35,21 @@ export default defineConfig({
           items: [
             { label: 'Installation', slug: 'getting-started/installation' },
             { label: 'Quick Start', slug: 'getting-started/quick-start' },
+          ],
+        },
+        {
+          label: 'Design',
+          items: [
+            { label: 'Philosophy', slug: 'design/philosophy' },
+            { label: 'Architecture', slug: 'design/architecture' },
+            { label: 'Framework Comparison', slug: 'design/framework-comparison' },
+            { label: 'Communication', slug: 'design/communication' },
+            { label: 'Memory', slug: 'design/memory' },
+            { label: 'Message Parts', slug: 'design/message-parts' },
+            { label: 'Package Structure', slug: 'design/package-structure' },
+            { label: 'Security', slug: 'design/security' },
+            { label: 'Task Lifecycle', slug: 'design/task-lifecycle' },
+            { label: 'Tool Execution', slug: 'design/tool-execution' },
           ],
         },
         {
@@ -64,21 +80,7 @@ export default defineConfig({
             { label: 'Glossary', slug: 'reference/glossary' },
           ],
         },
-        {
-          label: 'Design',
-          items: [
-            { label: 'Philosophy', slug: 'design/philosophy' },
-            { label: 'Architecture', slug: 'design/architecture' },
-            { label: 'Framework Comparison', slug: 'design/framework-comparison' },
-            { label: 'Communication', slug: 'design/communication' },
-            { label: 'Memory', slug: 'design/memory' },
-            { label: 'Message Parts', slug: 'design/message-parts' },
-            { label: 'Package Structure', slug: 'design/package-structure' },
-            { label: 'Security', slug: 'design/security' },
-            { label: 'Task Lifecycle', slug: 'design/task-lifecycle' },
-            { label: 'Tool Execution', slug: 'design/tool-execution' },
-          ],
-        },
+
       ],
 
     }),

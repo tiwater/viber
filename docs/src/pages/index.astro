@@ -1,9 +1,8 @@
 ---
 import Header from "../components/header.astro";
 import TryAgentSection from "../components/try-agent-section.svelte";
-import "../styles/playground.css";
+import "../styles/global.css";
 import {
-  ChevronRight,
   Bot,
   Hammer,
   Box,
@@ -11,6 +10,8 @@ import {
   Code2,
   Activity,
   ArrowRight,
+  Sparkles,
+  Github,
 } from "lucide-svelte";
 
 const title = "Viber | Agent Framework for Vibe Working";
@@ -21,34 +22,40 @@ const features = [
     title: "Multi-Agent System",
     description:
       "Define and orchestrate multiple AI agents that collaborate to solve complex tasks.",
+    gradient: "from-cyan-500 to-blue-500",
   },
   {
     Icon: Hammer,
     title: "Tool Framework",
     description:
       "Decorator-based tool definitions with full Zod schema validation.",
+    gradient: "from-purple-500 to-pink-500",
   },
   {
     Icon: Box,
     title: "Space Management",
     description:
       "Organize conversations, artifacts, and tasks in isolated workspaces.",
+    gradient: "from-orange-500 to-red-500",
   },
   {
     Icon: Zap,
     title: "Reactive State",
     description: "Zustand-based state management with real-time updates.",
+    gradient: "from-yellow-500 to-orange-500",
   },
   {
     Icon: Code2,
     title: "Framework Agnostic",
     description: "Works seamlessly with React, Svelte, or vanilla JavaScript.",
+    gradient: "from-green-500 to-emerald-500",
   },
   {
     Icon: Activity,
     title: "Streaming Support",
     description:
       "Built-in streaming for real-time AI responses and progress updates.",
+    gradient: "from-indigo-500 to-purple-500",
   },
 ];
 ---
@@ -85,99 +92,122 @@ const features = [
     </script>
   </head>
   <body
-    class="antialiased min-h-screen bg-background text-foreground selection:bg-cyan-500/30"
+    class="antialiased min-h-screen bg-background text-foreground selection:bg-cyan-500/30 overflow-x-hidden"
   >
     <div class="flex flex-col min-h-screen">
       <Header />
       <main class="flex-1 flex flex-col relative">
-        <!-- Background Gradients -->
+        <!-- Animated Background -->
         <div class="fixed inset-0 z-[-1] pointer-events-none overflow-hidden">
-          <div
-            class="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-cyan-500/5 blur-[120px] mix-blend-screen dark:mix-blend-screen"
-          >
-          </div>
-          <div
-            class="absolute bottom-[-10%] right-[-10%] w-[50vw] h-[50vw] rounded-full bg-purple-500/5 blur-[120px] mix-blend-screen dark:mix-blend-screen"
-          >
-          </div>
+          <!-- Grid pattern -->
+          <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] dark:opacity-[0.03]"></div>
+          
+          <!-- Animated gradient orbs -->
+          <div class="absolute top-[-20%] left-[-10%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/10 blur-[100px] animate-float"></div>
+          <div class="absolute top-[30%] right-[-20%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-br from-purple-500/15 to-pink-500/10 blur-[100px] animate-float-delayed"></div>
+          <div class="absolute bottom-[-10%] left-[20%] w-[40vw] h-[40vw] rounded-full bg-gradient-to-br from-indigo-500/10 to-cyan-500/5 blur-[80px] animate-float-slow"></div>
         </div>
 
         <!-- Hero Section -->
-        <section class="relative pt-32 pb-20 px-6">
+        <section class="relative pt-24 md:pt-32 pb-16 md:pb-24 px-6">
           <div class="container mx-auto max-w-5xl text-center">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-border/50 bg-secondary/30 backdrop-blur-sm mb-8 animate-fade-in">
+              <Sparkles size={14} class="text-cyan-500" />
+              <span class="text-sm font-medium text-muted-foreground">Built for the AI era</span>
+            </div>
+            
             <h1
-              class="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70"
+              class="text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-6 animate-fade-in-up"
             >
-              The <span
-                class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500"
-                >Agent Framework</span
-              ><br /> for Vibe Working
+              <span class="block text-foreground">The</span>
+              <span
+                class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 animate-gradient-x"
+              >Agent Framework</span>
+              <span class="block text-foreground mt-2">for Vibe Working</span>
             </h1>
 
             <p
-              class="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed"
+              class="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed animate-fade-in-up delay-100"
             >
               Build, orchestrate, and deploy autonomous agents with ease. A
               type-safe, reactive framework for the next generation of AI apps.
             </p>
 
             <div
-              class="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up delay-200"
             >
               <a
                 href="/getting-started/installation/"
-                class="h-12 px-8 rounded-full bg-foreground text-background font-medium hover:opacity-90 transition-opacity flex items-center gap-2"
+                class="group h-12 px-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-medium hover:shadow-lg hover:shadow-cyan-500/25 transition-all duration-300 flex items-center gap-2 hover:scale-105"
               >
                 Get Started
-                <ArrowRight size={16} />
+                <ArrowRight size={16} class="group-hover:translate-x-1 transition-transform" />
               </a>
               <a
                 href="/playground/"
-                class="h-12 px-8 rounded-full border border-border bg-background/50 hover:bg-secondary/50 backdrop-blur-sm transition-colors flex items-center gap-2 font-medium"
+                class="h-12 px-8 rounded-full border border-border/80 bg-background/80 hover:bg-secondary/50 backdrop-blur-sm transition-all duration-300 flex items-center gap-2 font-medium hover:border-cyan-500/50"
               >
                 Try Playground
+              </a>
+              <a
+                href="https://github.com/tiwater/viber"
+                target="_blank"
+                class="h-12 px-8 rounded-full border border-border/50 bg-background/50 hover:bg-secondary/50 backdrop-blur-sm transition-all duration-300 flex items-center gap-2 font-medium"
+              >
+                <Github size={18} />
+                GitHub
               </a>
             </div>
           </div>
         </section>
 
         <!-- Try Agent Section (Interactive) -->
-        <section class="py-12 px-6">
-          <div class="mx-auto">
-            <div class="rounded-xl bg-card/50 backdrop-blur-sm overflow-hidden">
+        <section class="py-8 md:py-12 px-6">
+          <div class="container mx-auto max-w-5xl">
+            <div class="rounded-2xl bg-card/30 backdrop-blur-sm border border-border/50 overflow-hidden shadow-xl">
               <TryAgentSection client:load />
             </div>
           </div>
         </section>
 
         <!-- Features Grid -->
-        <section class="py-24 px-6 relative">
+        <section class="py-20 md:py-32 px-6 relative">
           <div class="container mx-auto max-w-6xl">
             <div class="text-center mb-16">
-              <h2 class="text-3xl font-bold mb-4">Why Choose Viber?</h2>
-              <p class="text-muted-foreground max-w-2xl mx-auto">
+              <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                Why Choose <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500">Viber</span>?
+              </h2>
+              <p class="text-muted-foreground max-w-2xl mx-auto text-lg">
                 Designed for developer experience and production reliability.
               </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {
-                features.map((feature) => {
+                features.map((feature, index) => {
                   const Icon = feature.Icon;
 
                   return (
-                    <div class="group p-6 rounded-2xl border border-border/50 bg-card/30 hover:border-border/80 hover:bg-card/50 transition-all duration-300">
-                      <div class="h-12 w-12 rounded-xl bg-secondary/50 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <div class="text-cyan-500 dark:text-cyan-400">
-                          <Icon size={24} />
+                    <div 
+                      class="group relative p-6 rounded-2xl border border-border/50 bg-card/30 hover:bg-card/50 transition-all duration-500 hover:border-transparent overflow-hidden"
+                      style={`animation-delay: ${index * 100}ms`}
+                    >
+                      <!-- Gradient border on hover -->
+                      <div class={`absolute inset-0 rounded-2xl bg-gradient-to-r ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                      <div class="absolute inset-[1px] rounded-2xl bg-card/95 dark:bg-card/90"></div>
+                      
+                      <div class="relative z-10">
+                        <div class={`h-12 w-12 rounded-xl bg-gradient-to-br ${feature.gradient} flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 group-hover:shadow-xl transition-all duration-300`}>
+                          <Icon size={24} class="text-white" />
                         </div>
+                        <h3 class="text-lg font-semibold mb-2">
+                          {feature.title}
+                        </h3>
+                        <p class="text-muted-foreground leading-relaxed text-sm">
+                          {feature.description}
+                        </p>
                       </div>
-                      <h3 class="text-lg font-semibold mb-2">
-                        {feature.title}
-                      </h3>
-                      <p class="text-muted-foreground leading-relaxed text-sm">
-                        {feature.description}
-                      </p>
                     </div>
                   );
                 })
@@ -187,49 +217,98 @@ const features = [
         </section>
 
         <!-- Quick Start -->
-        <section class="py-24 px-6 border-t border-border/40 bg-secondary/5">
-          <div class="container mx-auto max-w-4xl">
-            <div class="flex flex-col md:flex-row items-center gap-12">
-              <div class="flex-1 text-center md:text-left">
-                <h2 class="text-3xl font-bold mb-4">
-                  Start building in seconds
+        <section class="py-20 md:py-32 px-6 relative overflow-hidden">
+          <!-- Background accent -->
+          <div class="absolute inset-0 bg-gradient-to-b from-transparent via-secondary/20 to-transparent"></div>
+          
+          <div class="container mx-auto max-w-5xl relative">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+              <div class="flex-1 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-500 text-sm font-medium mb-6">
+                  <Zap size={14} />
+                  Lightning Fast Setup
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                  Start building in <span class="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">seconds</span>
                 </h2>
-                <p class="text-muted-foreground mb-8">
+                <p class="text-muted-foreground mb-8 text-lg">
                   Install the package and create your first agent with just a
                   few lines of code. No complex configuration required.
                 </p>
                 <a
                   href="/getting-started/quick-start/"
-                  class="inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-400 font-medium transition-colors"
+                  class="group inline-flex items-center gap-2 text-cyan-500 hover:text-cyan-400 font-medium transition-colors text-lg"
                 >
                   Read the full guide
-                  <ArrowRight size={16} />
+                  <ArrowRight size={18} class="group-hover:translate-x-1 transition-transform" />
                 </a>
               </div>
 
               <div class="flex-1 w-full max-w-lg">
                 <div
-                  class="rounded-xl border border-border bg-[#0d1117] p-6 shadow-2xl overflow-hidden relative group"
+                  class="rounded-2xl border border-border/50 bg-[#0d1117] p-6 shadow-2xl overflow-hidden relative group hover:shadow-cyan-500/10 transition-shadow duration-500"
                 >
-                  <div
-                    class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-purple-500"
-                  >
+                  <!-- Animated gradient border -->
+                  <div class="absolute inset-0 rounded-2xl bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500 opacity-50 blur-sm group-hover:opacity-75 transition-opacity animate-gradient-x"></div>
+                  <div class="absolute inset-[1px] rounded-2xl bg-[#0d1117]"></div>
+                  
+                  <!-- Top bar -->
+                  <div class="relative flex items-center gap-2 pb-4 border-b border-white/10 mb-4">
+                    <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    <span class="ml-4 text-xs text-gray-500 font-mono">terminal</span>
                   </div>
-                  <pre
-                    class="font-mono text-sm leading-relaxed overflow-x-auto">
-<code class="text-gray-300"><span class="text-cyan-400">pnpm</span> add viber
+                  
+                  <pre class="relative font-mono text-sm leading-relaxed overflow-x-auto">
+<code class="text-gray-300"><span class="text-gray-500">$</span> <span class="text-cyan-400">pnpm</span> add viber
 
 <span class="text-purple-400">import</span> {"{"} Agent, Space {"}"} <span class="text-purple-400">from</span> <span class="text-green-400">'viber'</span>;
 
-<span class="text-purple-400">const</span> agent = <span class="text-purple-400">new</span> <span class="text-yellow-300">Agent</span>({"{"}
-  name: <span class="text-green-400">'Assistant'</span>,
-  model: <span class="text-green-400">'openai:gpt-4o'</span>,
-  systemPrompt: <span class="text-green-400">'You are a helpful assistant.'</span>
-{"}"});
+<span class="text-purple-400">const</span> agent = <span class="text-purple-400">new</span> <span class="text-yellow-300">Agent</span>({"{"}{`
+`}  name: <span class="text-green-400">'Assistant'</span>,{`
+`}  model: <span class="text-green-400">'openai:gpt-4o'</span>,{`
+`}  systemPrompt: <span class="text-green-400">'You are helpful.'</span>{`
+`}{"}"});
 
-<span class="text-purple-400">const</span> result = <span class="text-purple-400">await</span> agent.<span class="text-blue-400">streamText</span>({"{"}
-  messages: [{"{"} role: <span class="text-green-400">'user'</span>, content: <span class="text-green-400">'Hello!'</span> {"}"}]
-{"}"});</code></pre>
+<span class="text-purple-400">const</span> result = <span class="text-purple-400">await</span> agent.<span class="text-blue-400">streamText</span>({"{"}{`
+`}  messages: [{"{"} role: <span class="text-green-400">'user'</span>, content: <span class="text-green-400">'Hello!'</span> {"}"}]{`
+`}{"}"});</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="py-20 md:py-32 px-6">
+          <div class="container mx-auto max-w-4xl">
+            <div class="relative rounded-3xl overflow-hidden">
+              <!-- Gradient background -->
+              <div class="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500"></div>
+              <div class="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
+              
+              <div class="relative px-8 py-16 md:px-16 md:py-20 text-center text-white">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                  Ready to build the future?
+                </h2>
+                <p class="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+                  Join developers building the next generation of AI applications with Viber.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                  <a
+                    href="/getting-started/installation/"
+                    class="h-12 px-8 rounded-full bg-white text-gray-900 font-medium hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
+                  >
+                    Get Started Free
+                    <ArrowRight size={16} />
+                  </a>
+                  <a
+                    href="/design/philosophy/"
+                    class="h-12 px-8 rounded-full border-2 border-white/30 text-white hover:bg-white/10 transition-colors flex items-center justify-center gap-2 font-medium"
+                  >
+                    Read the Philosophy
+                  </a>
                 </div>
               </div>
             </div>
@@ -237,31 +316,28 @@ const features = [
         </section>
 
         <!-- Footer -->
-        <footer class="py-12 px-6 bg-background">
+        <footer class="py-12 px-6 border-t border-border/40">
           <div
-            class="mx-auto flex flex-col md:flex-row justify-between items-center gap-6"
+            class="container mx-auto max-w-6xl flex flex-col md:flex-row justify-between items-center gap-6"
           >
-            <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <div class="flex items-center gap-3 text-sm text-muted-foreground">
               <img src="/favicon.png" alt="Viber Logo" class="w-8 h-8" />
-              © {new Date().getFullYear()} Tiwater Team.
+              <span>© {new Date().getFullYear()} Tiwater Team. Built with ❤️ for the AI era.</span>
             </div>
-            <div class="flex gap-6 text-sm font-medium">
+            <div class="flex gap-8 text-sm font-medium">
               <a
                 href="/playground/"
                 class="text-muted-foreground hover:text-foreground transition-colors"
-                >Playground</a
-              >
+              >Playground</a>
               <a
-                href="/docs/"
+                href="/getting-started/installation/"
                 class="text-muted-foreground hover:text-foreground transition-colors"
-                >Docs</a
-              >
+              >Docs</a>
               <a
                 href="https://github.com/tiwater/viber"
                 target="_blank"
                 class="text-muted-foreground hover:text-foreground transition-colors"
-                >GitHub</a
-              >
+              >GitHub</a>
             </div>
           </div>
         </footer>
@@ -273,5 +349,77 @@ const features = [
 <style>
   :global(.dark) {
     color-scheme: dark;
+  }
+  
+  /* Grid pattern */
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  
+  /* Animations */
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-20px) translateX(10px); }
+  }
+  
+  @keyframes float-delayed {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(15px) translateX(-15px); }
+  }
+  
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes gradient-x {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  .animate-float {
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  .animate-float-delayed {
+    animation: float-delayed 10s ease-in-out infinite;
+  }
+  
+  .animate-float-slow {
+    animation: float-slow 12s ease-in-out infinite;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.6s ease-out forwards;
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+  
+  .animate-gradient-x {
+    background-size: 200% 200%;
+    animation: gradient-x 3s ease infinite;
+  }
+  
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .delay-200 {
+    animation-delay: 200ms;
   }
 </style>
