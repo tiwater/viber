@@ -13,12 +13,19 @@ Viber is a flexible multi-agent AI framework with built-in desktop automation. I
 - 🩹 **Auto-Healing** - Automatically recover from Antigravity IDE errors
 - 🎯 **Framework Agnostic** - Works with React, Svelte, or vanilla JS
 
+## Quick Start
+
+```bash
+# Auto-heal Antigravity errors (no install needed)
+npx @tiwater/viber monitor
+```
+
 ## Installation
 
 ```bash
+# Install globally for easier access
 npm install -g @tiwater/viber
-# or use directly with npx
-npx @tiwater/viber --help
+viber --help
 ```
 
 ## CLI Commands
