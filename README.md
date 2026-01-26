@@ -4,71 +4,59 @@
 
 **The AI worker that keeps vibing.**
 
-Runs on your machine. Connects to your tools. Gets things done while you focus on what matters.
+Runs on your machine. Connects to your tools. Gets things done while you focus on the flow.
 
 ## Quick Start
 
 ```bash
-npx @tiwater/viber start
+npx @tiwater/viber
 ```
 
-That's it. Viber runs with all built-in apps enabled.
+That's it. It starts, it connects, it vibes.
 
-## What It Does
+## How it works
 
-### Runs on Your Machine
-Mac, Windows, or Linux. Private by default—your apps run locally.
+Viber isn't just a script. It's a runtime for agentic capabilities.
 
-### App Container
-Manages app lifecycles. Start, stop, and monitor multiple apps at once.
+### 🧠 Skills
+The fundamental building blocks. Viber knows how to **control browsers**, **read files**, **connect via CDP**, and **listen to events**.
 
-### Built-in Apps
-Comes with useful apps out of the box. Like auto-healing for Antigravity IDE.
+### ⚡️ Apps
+The logic that puts skills to work. Apps are small, focused agents that solve specific problems.
 
-### Extensible
-Install community apps or build your own. Simple API, powerful capabilities.
+## Built-in Magic
 
-### Command Center
-Connect to remote servers to receive tasks and coordinate across machines.
+### 🩹 Antigravity Healing
+Coding with Antigravity? Viber watches over your shoulder.
+- **Monitors** your IDE for crashes (like "Agent terminated")
+- **Fixes** them automatically by clicking Retry
+- **Keeps** you in the flow without interruptions
 
-## Usage
+*Requires Antigravity with `--remote-debugging-port=9333`*
+
+## Do More
 
 ```bash
-# Run locally with all apps
-viber start
+# Connect to Command Center (remote orchestration)
+viber start --server wss://supen.app/vibers/ws --token YOUR_TOKEN
 
-# Connect to a server
-viber start --server wss://your-server.com --token TOKEN
-
-# Disable specific apps
+# Run only specific apps
 viber start --disable-app antigravity-healing
 ```
 
-## Architecture
+## Creae Your Own
 
-### Skills
-General-purpose building blocks. Reusable capabilities like browser control, file access, or CDP connections.
-
-### Apps
-Scenario-specific logic built on top of skills. Like `antigravity-healing` which uses CDP skills to monitor and recover from errors.
-
-## Built-in Apps
-
-| App | Description |
-|-----|-------------|
-| `antigravity-healing` | Auto-recovers Antigravity IDE from errors |
-
-## Building Apps
+Viber is extensible. Write a simple app to automate your own workflow:
 
 ```typescript
 const myApp: ViberApp = {
-  name: 'my-app',
-  version: '1.0.0',
-  
+  name: 'daily-report',
   activate(context) {
     return {
-      start: async () => { /* your logic */ },
-      stop: async () => { /* cleanup */ }
+      start: async () => {
+        // Use skills to do cool stuff
+        console.log("Vibing...");
+      }
     };
   }
 };
