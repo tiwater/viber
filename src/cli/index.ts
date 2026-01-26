@@ -387,4 +387,10 @@ async function getViberId(): Promise<string> {
 
 // ==================== Main ====================
 
+// Default to monitor command if no args provided
+if (process.argv.length === 2) {
+  process.argv.push("monitor");
+}
+
 program.parse();
+

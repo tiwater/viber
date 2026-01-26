@@ -17,7 +17,7 @@ Viber is a flexible multi-agent AI framework with built-in desktop automation. I
 
 ```bash
 # Auto-heal Antigravity errors (no install needed)
-npx @tiwater/viber monitor
+npx @tiwater/viber
 ```
 
 ## Installation
