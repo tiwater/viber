@@ -2,9 +2,9 @@
 
 # Viber
 
-**Vibe-coding that keeps running.**
+**Your local tools, supercharged.**
 
-Background apps that fix, enhance, and automate your AI coding workflow.
+Background apps that connect, automate, and enhance your local development environment.
 
 ## Quick Start
 
