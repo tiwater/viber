@@ -10,10 +10,12 @@ describe('DataAdapterFactory', () => {
     process.env = { ...initialEnv }; // Reset env
     // Default to test environment
     process.env.NODE_ENV = 'test';
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => {
     process.env = initialEnv;
+    vi.restoreAllMocks();
   });
 
   it('should use explicit VIBEX_DATA_MODE="local"', () => {
