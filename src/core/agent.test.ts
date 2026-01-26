@@ -1,30 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { Agent, AgentContext, AgentResponse } from "./agent";
+import { Agent, AgentContext } from "./agent";
 import { AgentConfig } from "./config";
 import { ViberMessage, ConversationHistory } from "./message";
 
-// Mock the AI SDK
-vi.mock("ai", () => ({
-  streamText: vi.fn(() => ({
-    fullStream: (async function* () {
-      yield { type: "text-delta", text: "Hello" };
-      yield { type: "text-delta", text: " World" };
-      yield { type: "finish", finishReason: "stop" };
-    })(),
-    textStream: (async function* () {
-      yield "Hello";
-      yield " World";
-    })(),
-    text: "Hello World",
-    agentMetadata: { name: "test-agent" },
-  })),
-  generateText: vi.fn(() =>
-    Promise.resolve({
-      text: "Generated text response",
-      toolCalls: [],
-    })
-  ),
-}));
+// Mock the AI SDK using test-utils
+vi.mock("ai", async () => {
+  const { createMockAIProvider } = await import("../test-utils");
+  return createMockAIProvider();
+});
 
 // Mock provider
 vi.mock("./provider", () => ({
