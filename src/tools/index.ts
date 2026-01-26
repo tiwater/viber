@@ -7,6 +7,11 @@
 
 import { CoreTool } from "../core/tool";
 import { Tool } from "./base";
+import { skillRegistry } from "../core/skills";
+import { registerDefaultSkills } from "../skills";
+
+// Register skills on load
+registerDefaultSkills();
 
 // Import all tools
 import { FileTool } from "./file";
@@ -502,8 +507,36 @@ export function buildToolMap(
       }
     }
 
+    // Check if this is a skill ID
+    if (skillRegistry.has(toolId)) {
+      const skill = skillRegistry.get(toolId)!;
+      for (const [name, toolDef] of Object.entries(skill.tools)) {
+        tools[name] = {
+          description: toolDef.description,
+          inputSchema: toolDef.parameters,
+          execute: toolDef.execute,
+        };
+      }
+      continue;
+    }
+
     // Otherwise, try to find it as a specific function
     let found = false;
+
+    // Check skills for specific functions
+    for (const skill of skillRegistry.getAll()) {
+      if (toolId in skill.tools) {
+        const toolDef = skill.tools[toolId];
+        tools[toolId] = {
+          description: toolDef.description,
+          inputSchema: toolDef.parameters,
+          execute: toolDef.execute,
+        };
+        found = true;
+        break;
+      }
+    }
+    if (found) continue;
 
     for (const [id] of toolClasses) {
       const tool = getToolInstance(id);
@@ -548,6 +581,10 @@ export function getAllToolIds(): string[] {
     ids.push(...Object.keys(toolFunctions));
   }
 
+  for (const skill of skillRegistry.getAll()) {
+    ids.push(...Object.keys(skill.tools));
+  }
+
   return ids;
 }
 
@@ -566,6 +603,14 @@ export function getProviderToolIds(toolId: string): string[] {
  * Check if a tool ID is available
  */
 export function isToolAvailable(toolId: string): boolean {
+  // Check skills
+  if (skillRegistry.has(toolId)) return true;
+  for (const skill of skillRegistry.getAll()) {
+    if (toolId in skill.tools) {
+      return true;
+    }
+  }
+
   for (const [id] of toolClasses) {
     const tool = getToolInstance(id);
     if (!tool) continue;
