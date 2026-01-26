@@ -2,9 +2,9 @@
 
 # Viber
 
-**Your local tools, supercharged.**
+**The AI worker that keeps going.**
 
-Background apps that connect, automate, and enhance your local development environment.
+Runs on your machine. Connects to your tools. Gets things done while you focus on what matters.
 
 ## Quick Start
 
