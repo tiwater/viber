@@ -2,104 +2,70 @@
 
 # @tiwater/viber
 
-**Agent Framework for Vibe-working**
+**CLI tool for autonomous AI coding workflows**
 
-Viber is a flexible multi-agent AI framework with built-in desktop automation. It provides:
+Viber runs apps that enhance your AI coding experience. Currently includes:
 
-- 🤖 **Agent System** - Define and orchestrate multiple AI agents
-- 🛠️ **Tool Framework** - Decorator-based tool definitions with Zod schemas
-- 📦 **Space Management** - Organize conversations, artifacts, and tasks
-- 🔄 **State Management** - Zustand-based reactive state
-- 🩹 **Auto-Healing** - Automatically recover from Antigravity IDE errors
-- 🎯 **Framework Agnostic** - Works with React, Svelte, or vanilla JS
+- � **Auto-Healing** - Automatically recovers from Antigravity IDE errors
+- � **Command Center** - Connect to remote task servers
+- � **Plugin Architecture** - Extensible app system
 
 ## Quick Start
 
+**Prerequisites:** Start Antigravity with CDP enabled:
 ```bash
-# Run the daemon with all apps (including auto-healing)
-npx @tiwater/viber start --token YOUR_TOKEN
-
-# Or run monitor standalone
-npx @tiwater/viber monitor
+open -a Antigravity --args --remote-debugging-port=9333
 ```
+
+**Run viber:**
+```bash
+# No install needed
+npx @tiwater/viber start
+```
+
+That's it! Viber will automatically heal any "Agent terminated" errors in Antigravity.
 
 ## Installation
 
 ```bash
-# Install globally for easier access
 npm install -g @tiwater/viber
-viber --help
 ```
 
-## CLI Commands
-
-### Auto-Healing (Antigravity Monitor)
-
-Automatically detects and recovers from "Agent terminated" errors in Antigravity IDE:
+## Usage
 
 ```bash
-# Start the monitor (requires Antigravity to run with --remote-debugging-port=9333)
-viber monitor
+# Start in local mode (run all apps)
+viber start
 
-# Options
-viber monitor --interval 5000        # Check every 5 seconds
-viber monitor --cdp-port 9222        # Use different CDP port
-viber monitor --max-retries 5        # Max retries before alerting
-```
-
-### Full Daemon Mode
-
-Connect to command center with all apps enabled:
-
-```bash
-# Start daemon with auto-healing
-viber start --token YOUR_TOKEN
+# Connect to a remote command center
+viber start --server wss://your-server.com --token YOUR_TOKEN
 
 # Disable specific apps
-viber start --token YOUR_TOKEN --disable-app antigravity-healing
+viber start --disable-app antigravity-healing
 
-# Disable all apps
-viber start --token YOUR_TOKEN --no-apps
-```
-
-### Run Tasks Locally
-
-```bash
-viber run "Create a hello world app"
-viber run "Fix the bug in main.ts" --workspace ./my-project
-```
-
-## Programmatic Usage
-
-```typescript
-import { Agent, Space, streamText } from '@tiwater/viber';
-
-// Create an agent
-const agent = new Agent({
-  name: 'Assistant',
-  model: 'openai:gpt-4o',
-  systemPrompt: 'You are a helpful assistant.',
-});
-
-// Stream a response
-const result = await agent.streamText({
-  messages: [{ role: 'user', content: 'Hello!' }],
-});
+# Disable all apps (just connect to server)
+viber start --no-apps
 ```
 
 ## Apps
 
-Viber includes built-in apps that extend functionality:
-
 | App | Description |
 |-----|-------------|
-| `antigravity-healing` | Auto-detects and recovers from Antigravity IDE errors |
+| `antigravity-healing` | Monitors Antigravity windows and auto-clicks Retry on errors |
 
-Apps are auto-loaded when running `viber start`. Use `--disable-app` to exclude specific apps.
+Apps are auto-loaded by default. Use `--disable-app <name>` to exclude specific apps.
+
+## How Auto-Healing Works
+
+1. Connects to Antigravity via Chrome DevTools Protocol (CDP)
+2. Monitors all webview windows for error states
+3. Detects "Agent terminated" or similar errors in the iframe
+4. Automatically clicks the Retry button to recover
+5. Logs all healing actions for visibility
 
 ## Documentation
 
-See the [docs](./docs) folder for full documentation and examples.
+See the [docs](./docs) folder for full documentation.
 
 ## License
 

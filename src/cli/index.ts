@@ -25,8 +25,8 @@ program
 
 program
   .command("start")
-  .description("Start the viber daemon and connect to command center")
-  .option("-s, --server <url>", "Command center URL", "wss://supen.app/vibers/ws")
+  .description("Start viber with all apps (local mode, or connect to server with --server)")
+  .option("-s, --server <url>", "Command center URL (enables connected mode)")
   .option("-t, --token <token>", "Authentication token (or set VIBER_TOKEN)")
   .option("-n, --name <name>", "Viber name", `${os.hostname()}-viber`)
   .option("--desktop", "Enable desktop control (UI-TARS)")
@@ -42,24 +42,16 @@ program
     // Get or generate viber ID
     const viberId = await getViberId();
 
-    // Token from CLI or env
+    // Token from CLI or env (only required if connecting to server)
     const token = options.token || process.env.VIBER_TOKEN;
-    if (!token) {
-      console.error("Error: Authentication token required.");
+    const connectToServer = options.server && token;
+
+    if (options.server && !token) {
+      console.error("Error: Authentication token required when using --server.");
       console.error("Use --token <token> or set VIBER_TOKEN environment variable.");
       console.error("\nTo get a token, run: viber login");
       process.exit(1);
     }
-
-    const controller = new ViberController({
-      serverUrl: options.server,
-      token,
-      viberId,
-      viberName: options.name,
-      enableDesktop: options.desktop,
-      reconnectInterval: parseInt(options.reconnectInterval, 10),
-      heartbeatInterval: parseInt(options.heartbeatInterval, 10),
-    });
 
     // Load apps (unless --no-apps)
     const appInstances: Map<string, any> = new Map();
@@ -84,58 +76,6 @@ program
       }
     }
 
-    // Handle graceful shutdown
-    process.on("SIGINT", async () => {
-      console.log("\n[Viber] Shutting down...");
-      // Stop apps first
-      for (const [name, instance] of appInstances) {
-        try {
-          await instance.stop();
-          console.log(`[Apps] Stopped: ${name}`);
-        } catch { }
-      }
-      await controller.stop();
-      process.exit(0);
-    });
-
-    process.on("SIGTERM", async () => {
-      for (const [, instance] of appInstances) {
-        try { await instance.stop(); } catch { }
-      }
-      await controller.stop();
-      process.exit(0);
-    });
-
-    // Log connection events
-    controller.on("connected", () => {
-      const appList = appInstances.size > 0
-        ? Array.from(appInstances.keys()).join(", ")
-        : "(none)";
-      console.log(`
-╔═══════════════════════════════════════════════════════════╗
-║                     VIBER RUNNING                          ║
-╠═══════════════════════════════════════════════════════════╣
-║  Viber ID:     ${viberId.padEnd(40)}║
-║  Name:         ${options.name.padEnd(40)}║
-║  Server:       ${options.server.slice(0, 40).padEnd(40)}║
-║  Desktop:      ${(options.desktop ? "Enabled" : "Disabled").padEnd(40)}║
-║  Apps:         ${appList.slice(0, 40).padEnd(40)}║
-║  Status:       ● Connected                                ║
-╚═══════════════════════════════════════════════════════════╝
-
-Waiting for tasks from command center...
-Press Ctrl+C to stop.
-      `);
-    });
-
-    controller.on("disconnected", () => {
-      console.log("[Viber] Connection lost. Reconnecting...");
-    });
-
-    controller.on("error", (error) => {
-      console.error("[Viber] Error:", error.message);
-    });
-
     // Start apps
     for (const [name, instance] of appInstances) {
       try {
@@ -146,8 +86,86 @@ Press Ctrl+C to stop.
       }
     }
 
-    // Start the controller
-    await controller.start();
+    const appList = appInstances.size > 0
+      ? Array.from(appInstances.keys()).join(", ")
+      : "(none)";
+
+    // Handle graceful shutdown
+    const cleanup = async () => {
+      console.log("\n[Viber] Shutting down...");
+      for (const [name, instance] of appInstances) {
+        try {
+          await instance.stop();
+          console.log(`[Apps] Stopped: ${name}`);
+        } catch { }
+      }
+    };
+
+    process.on("SIGINT", async () => {
+      await cleanup();
+      process.exit(0);
+    });
+
+    process.on("SIGTERM", async () => {
+      await cleanup();
+      process.exit(0);
+    });
+
+    if (connectToServer) {
+      // Connected mode - connect to command center
+      const controller = new ViberController({
+        serverUrl: options.server,
+        token,
+        viberId,
+        viberName: options.name,
+        enableDesktop: options.desktop,
+        reconnectInterval: parseInt(options.reconnectInterval, 10),
+        heartbeatInterval: parseInt(options.heartbeatInterval, 10),
+      });
+
+      controller.on("connected", () => {
+        console.log(`
+╔═══════════════════════════════════════════════════════════╗
+║                     VIBER RUNNING                          ║
+╠═══════════════════════════════════════════════════════════╣
+║  Mode:         Connected                                  ║
+║  Viber ID:     ${viberId.padEnd(40)}║
+║  Server:       ${options.server.slice(0, 40).padEnd(40)}║
+║  Apps:         ${appList.slice(0, 40).padEnd(40)}║
+║  Status:       ● Connected                                ║
+╚═══════════════════════════════════════════════════════════╝
+
+Waiting for tasks from command center...
+Press Ctrl+C to stop.
+        `);
+      });
+
+      controller.on("disconnected", () => {
+        console.log("[Viber] Connection lost. Reconnecting...");
+      });
+
+      controller.on("error", (error) => {
+        console.error("[Viber] Error:", error.message);
+      });
+
+      await controller.start();
+    } else {
+      // Local mode - just run apps
+      console.log(`
+╔═══════════════════════════════════════════════════════════╗
+║                     VIBER RUNNING                          ║
+╠═══════════════════════════════════════════════════════════╣
+║  Mode:         Local                                      ║
+║  Apps:         ${appList.slice(0, 40).padEnd(40)}║
+║  Status:       ● Running                                  ║
+╚═══════════════════════════════════════════════════════════╝
+
+Running locally. Press Ctrl+C to stop.
+      `);
+
+      // Keep process alive
+      await new Promise(() => { });
+    }
   });
 
 // ==================== viber run ====================
