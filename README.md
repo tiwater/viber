@@ -2,28 +2,19 @@
 
 # @tiwater/viber
 
-**CLI tool for autonomous AI coding workflows**
+**Extensible app runtime for AI coding workflows**
 
-Viber runs apps that enhance your AI coding experience. Currently includes:
+Viber is a runtime that hosts and manages apps. It provides:
 
-- � **Auto-Healing** - Automatically recovers from Antigravity IDE errors
-- � **Command Center** - Connect to remote task servers
-- � **Plugin Architecture** - Extensible app system
+- 🔌 **Plugin Architecture** - Simple app registration and lifecycle management
+- 📡 **Command Center Integration** - Connect apps to remote task servers
+- 🛠️ **Developer Tools** - CLI for local development and testing
 
 ## Quick Start
 
-**Prerequisites:** Start Antigravity with CDP enabled:
 ```bash
-open -a Antigravity --args --remote-debugging-port=9333
-```
-
-**Run viber:**
-```bash
-# No install needed
 npx @tiwater/viber start
 ```
-
-That's it! Viber will automatically heal any "Agent terminated" errors in Antigravity.
 
 ## Installation
 
@@ -34,34 +25,66 @@ npm install -g @tiwater/viber
 ## Usage
 
 ```bash
-# Start in local mode (run all apps)
+# Run all registered apps locally
 viber start
 
-# Connect to a remote command center
+# Connect to a command center
 viber start --server wss://your-server.com --token YOUR_TOKEN
 
 # Disable specific apps
-viber start --disable-app antigravity-healing
-
-# Disable all apps (just connect to server)
-viber start --no-apps
+viber start --disable-app <app-name>
 ```
 
-## Apps
+## Building Apps
 
-| App | Description |
-|-----|-------------|
-| `antigravity-healing` | Monitors Antigravity windows and auto-clicks Retry on errors |
+Apps are simple modules that export an `activate` function:
 
-Apps are auto-loaded by default. Use `--disable-app <name>` to exclude specific apps.
+```typescript
+// src/apps/my-app/index.ts
+import type { ViberApp, ViberAppContext } from '@tiwater/viber';
 
-## How Auto-Healing Works
+const myApp: ViberApp = {
+  name: 'my-app',
+  version: '1.0.0',
+  
+  activate(context: ViberAppContext) {
+    return {
+      start: async () => {
+        console.log('App started!');
+        // Your app logic here
+      },
+      stop: async () => {
+        console.log('App stopped!');
+      }
+    };
+  }
+};
 
-1. Connects to Antigravity via Chrome DevTools Protocol (CDP)
-2. Monitors all webview windows for error states
-3. Detects "Agent terminated" or similar errors in the iframe
-4. Automatically clicks the Retry button to recover
-5. Logs all healing actions for visibility
+export default myApp;
+```
+
+Register your app in `src/apps/index.ts`:
+
+```typescript
+import myApp from './my-app';
+registerApp(myApp);
+```
+
+## Example: Antigravity Auto-Healing
+
+The `antigravity-healing` app demonstrates how to build a viber app. It monitors Antigravity IDE windows and automatically recovers from errors.
+
+**Setup:** Start Antigravity with CDP enabled:
+```bash
+open -a Antigravity --args --remote-debugging-port=9333
+```
+
+**Run:**
+```bash
+viber start
+```
+
+See [src/apps/antigravity-healing](./src/apps/antigravity-healing) for the full implementation.
 
 ## Documentation
 
