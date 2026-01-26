@@ -2,9 +2,9 @@
 
 # Viber
 
-**The app container that runs things.**
+**Vibe-coding that keeps running.**
 
-Apps for your AI coding workflow. Built-in essentials. Community extensions. One command.
+Background apps that fix, enhance, and automate your AI coding workflow.
 
 ## Quick Start
 
