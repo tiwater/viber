@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { z } from "zod";
 import { skillRegistry } from "./skills";
 import { buildToolMap, getAllToolIds, isToolAvailable } from "../tools/index";
@@ -18,11 +18,16 @@ describe("Skill System", () => {
   };
 
   beforeEach(() => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
     skillRegistry.clear();
     // Re-register default skills because they might be needed, but for this test we focus on testSkill
     // However, buildToolMap calls registerDefaultSkills which registers calculator.
     // So calculator will be present.
     skillRegistry.register(testSkill);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("should register and retrieve a skill", () => {

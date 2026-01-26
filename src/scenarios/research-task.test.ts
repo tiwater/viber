@@ -67,4 +67,22 @@ describe("Scenario: Research Task", () => {
     expect(call.options.maxSteps).toBe(5); // Verify loop is enabled
     expect(call.options.tools).toBeDefined();
   });
+
+  it("should configure multi-step reasoning correctly", async () => {
+    // 1. User asks a complex question
+    const messages = [createMessage("user", "Compare Python and Rust")];
+
+    // 2. Mock LLM response (just to trigger the call)
+    mockLLM.queueText("I will search for both.");
+
+    // 3. Agent processes request
+    await agent.streamText({ messages });
+
+    // 4. Verify maxSteps configuration
+    const call = mockLLM.getLastCall();
+    expect(call.options.maxSteps).toBe(5);
+
+    // 5. Verify tools are passed
+    expect(Object.keys(call.options.tools)).toContain("search");
+  });
 });

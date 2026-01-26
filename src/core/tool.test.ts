@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { isValidTool, clearToolCache, buildToolMap } from "./tool";
 
 // Use vi.hoisted to ensure mocks are available for vi.mock factories
@@ -36,6 +36,11 @@ describe("Tool System", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     clearToolCache();
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe("isValidTool", () => {

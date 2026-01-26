@@ -3014,6 +3014,7 @@ packages:
 
   'viber@file:':
     resolution: {directory: '', type: directory}
+    hasBin: true
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       svelte: ^5.0.0
