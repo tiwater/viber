@@ -11,27 +11,55 @@ export function getTools() {
       description: "Analyze the Antigravity IDE state to detect critical errors.",
       inputSchema: z.object({}),
       execute: async () => {
-        const cdp = new BrowserCDP();
+        const cdp = new BrowserCDP({ port: 9333 });
         const targets = await cdp.listTargets();
+
+        console.log(`[Antigravity] Found ${targets.length} targets:`, targets.map(t => ({ type: t.type, url: t.url?.slice(0, 60) })));
+
         const page = targets.find(t => t.type === 'page' && !t.url.startsWith('chrome'));
 
         if (!page) {
           return { status: "UNKNOWN", message: "No active browser page found." };
         }
 
-        // Inject the specific JS to find the iframe and error
+        console.log(`[Antigravity] Using page: ${page.url?.slice(0, 80)}`);
+
+        // Inject the specific JS to find the error in #cascade container inside the iframe
         const result = await cdp.evaluate(page, `
               (function() {
-                // First check iframe (where Antigravity chat panel lives)
-                const iframe = document.querySelector('iframe[src*="antigravity"]');
-                const iframeDoc = iframe && iframe.contentDocument;
-                const searchDoc = iframeDoc || document;
-                const searchText = (iframeDoc ? iframeDoc.body?.innerText : document.body?.innerText) || '';
+                // First, locate the Antigravity agent panel iframe
+                const iframe = document.getElementById('antigravity.agentPanel');
+                if (!iframe) {
+                  return {
+                    hasError: false,
+                    hasRetryButton: false,
+                    cascadeFound: false,
+                    iframeFound: false,
+                    textSnippet: 'Iframe not found'
+                  };
+                }
+                
+                // Access the iframe's document
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                if (!iframeDoc) {
+                  return {
+                    hasError: false,
+                    hasRetryButton: false,
+                    cascadeFound: false,
+                    iframeFound: true,
+                    textSnippet: 'Cannot access iframe document'
+                  };
+                }
+                
+                // Antigravity chat panel lives in #cascade container inside the iframe
+                const cascadeEl = iframeDoc.getElementById('cascade');
+                const searchDoc = cascadeEl || iframeDoc;
+                const searchText = (cascadeEl ? cascadeEl.innerText : iframeDoc.body?.innerText) || '';
                 
                 // Check for error by text content
                 const hasError = searchText.includes('Agent terminated due to error');
                 
-                // Look for Retry button in the same context
+                // Look for Retry button
                 let retryBtn = null;
                 if (hasError) {
                   const buttons = searchDoc.querySelectorAll('button');
@@ -43,10 +71,14 @@ export function getTools() {
                 return {
                   hasError: !!hasError,
                   hasRetryButton: !!retryBtn,
-                  iframeFound: !!iframe
+                  cascadeFound: !!cascadeEl,
+                  iframeFound: true,
+                  textSnippet: searchText.slice(0, 300)
                 };
               })()
         `);
+
+        console.log(`[Antigravity] Check result:`, JSON.stringify(result, null, 2));
 
         if (result?.hasError) {
           return {
@@ -64,17 +96,25 @@ export function getTools() {
       description: "Attempt to recover the Antigravity agent from a critical error.",
       inputSchema: z.object({}),
       execute: async () => {
-        const cdp = new BrowserCDP();
+        const cdp = new BrowserCDP({ port: 9333 });
         const targets = await cdp.listTargets();
         const page = targets.find(t => t.type === 'page' && !t.url.startsWith('chrome'));
 
         if (!page) return { success: false, message: "No page found" };
 
-        // Click Logic specifically searching inside the iframe
+        // Click Retry button in #cascade container inside the iframe
         const clicked = await cdp.evaluate(page, `
               (function() {
-                const iframe = document.querySelector('iframe[src*="antigravity"]');
-                const searchDoc = (iframe && iframe.contentDocument) || document;
+                // First, locate the Antigravity agent panel iframe
+                const iframe = document.getElementById('antigravity.agentPanel');
+                if (!iframe) return false;
+                
+                // Access the iframe's document
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                if (!iframeDoc) return false;
+                
+                const cascadeEl = iframeDoc.getElementById('cascade');
+                const searchDoc = cascadeEl || iframeDoc;
                 
                 const buttons = searchDoc.querySelectorAll('button');
                 const retryBtn = Array.from(buttons).find(

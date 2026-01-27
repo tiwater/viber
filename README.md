@@ -1,4 +1,8 @@
-<img src="https://raw.githubusercontent.com/tiwater/viber/main/docs/src/assets/logo.png" alt="Viber Logo" width="100" />
+<img src="https://raw.githubusercontent.com/dustland/viber/main/docs/src/assets/logo.png" alt="Viber Logo" width="100" />
+
+[![GitHub](https://img.shields.io/github/stars/dustland/viber?style=social)](https://github.com/dustland/viber)
+[![npm version](https://img.shields.io/npm/v/@dustland/viber)](https://www.npmjs.com/package/@dustland/viber)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # Viber
 
@@ -9,7 +13,7 @@ Runs on your machine. Connects to your tools. Gets things done while you focus o
 ## Quick Start
 
 ```bash
-npx @tiwater/viber
+npx @dustland/viber
 ```
 
 That's it. It starts, it connects, it vibes.
