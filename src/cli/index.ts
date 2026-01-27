@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// Load environment variables from .env file
+import "dotenv/config";
+
 /**
  * Viber CLI - Command line interface for the Viber framework
  *
@@ -140,7 +143,7 @@ Running locally. Press Ctrl+C to stop.
 program
   .command("run <goal>")
   .description("Run a task locally without connecting to command center")
-  .option("-m, --model <model>", "LLM model to use", "deepseek-chat")
+  .option("-m, --model <model>", "LLM model to use", "openrouter/deepseek/deepseek-chat")
   .option("-a, --agent <agent>", "Single agent to use")
   .option("--desktop", "Enable desktop control")
   .action(async (goal, options) => {

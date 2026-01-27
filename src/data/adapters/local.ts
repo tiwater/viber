@@ -41,7 +41,7 @@ export class LocalDataAdapter implements DataAdapter {
 
   async getAgents(): Promise<Agent[]> {
     const defaultsStorage = new BaseStorage(
-      path.join(__dirname, "..", "..", "defaults")
+      path.join(__dirname, "..", "defaults")
     );
     const rootStorage = new BaseStorage(getViberRoot());
     const agents: Agent[] = [];
@@ -83,9 +83,8 @@ export class LocalDataAdapter implements DataAdapter {
   }
 
   async getAgent(id: string): Promise<Agent | null> {
-    const defaultsStorage = new BaseStorage(
-      path.join(__dirname, "..", "..", "defaults")
-    );
+    const defaultsPath = path.join(__dirname, "..", "defaults");
+    const defaultsStorage = new BaseStorage(defaultsPath);
     const rootStorage = new BaseStorage(getViberRoot());
 
     // Try built-in first

@@ -408,8 +408,8 @@ export async function startSpace({
   const viberAgentConfig: AgentConfig = {
     name: "Viber",
     description: "I manage this space and coordinate all work.",
-    provider: "deepseek",
-    model: model || "deepseek-chat",
+    provider: "openrouter",
+    model: model || "openrouter/deepseek/deepseek-chat",
     temperature: 0.7,
     promptFile: "", // ViberAgent doesn't use prompt files
   };
