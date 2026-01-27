@@ -134,11 +134,11 @@ interface ContextManager {
 
 ## 6. Storage Adapters
 
-Viber supports multiple storage backends through adapters:
+Viber supports multiple storage backends through built-in adapters:
 
 | Adapter           | Structured Data | Files            | Vectors          |
 | ----------------- | --------------- | ---------------- | ---------------- |
-| `@viber/local`    | SQLite          | Filesystem       | JSON + in-memory |
-| `@viber/supabase` | PostgreSQL      | Supabase Storage | pgvector         |
+| `LocalAdapter`    | JSON files      | Filesystem       | In-memory        |
+| `SupabaseAdapter` | PostgreSQL      | Supabase Storage | pgvector         |
 
 This dual system allows Viber to get the best of both worlds: the full auditability and human accessibility of a file-based system, and the high-performance, intelligent retrieval of a semantic memory store. This is the architectural foundation that makes true, resumable, and context-aware collaborative sessions possible.

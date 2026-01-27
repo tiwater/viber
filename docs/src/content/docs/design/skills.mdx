@@ -1,0 +1,128 @@
+---
+title: "Skills Architecture"
+description: "Domain-specific knowledge modules that teach agents specialized capabilities"
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Overview
+
+**Skills** are domain-specific knowledge modules that extend agent capabilities. Unlike tools (which provide actions), skills provide *knowledge* and *context* that guide how agents approach problems.
+
+```
+Skills = Knowledge (how to approach)
+Tools  = Capabilities (how to execute)
+```
+
+## Skill Structure
+
+Each skill is a directory containing:
+
+```
+skills/
+└── antigravity/
+    ├── SKILL.md      # Frontmatter + instructions
+    └── index.ts      # Tool definitions (optional)
+```
+
+### SKILL.md Format
+
+```markdown
+---
+name: antigravity
+description: Monitors and heals Antigravity IDE agent errors
+---
+
+# Antigravity Healer
+
+You are a health monitor for the Antigravity IDE...
+
+## Detection Rules
+- Look for "Agent Terminated" errors
+- Check cascade panel visibility
+
+## Recovery Procedure
+1. Call antigravity_check_and_heal
+2. Report status
+```
+
+The frontmatter defines metadata, and the markdown body provides instructions injected into the agent's system prompt.
+
+## Skill Tools
+
+Skills can provide specialized tools via `index.ts`:
+
+```typescript
+import { z } from "zod";
+
+export function getTools() {
+  return {
+    antigravity_check_and_heal: {
+      description: "Scan for errors and auto-recover",
+      inputSchema: z.object({}),
+      execute: async () => {
+        // Domain-specific implementation
+        return { status: "HEALTHY", message: "All good" };
+      },
+    },
+  };
+}
+```
+
+## Using Skills
+
+Skills are assigned to agents via configuration:
+
+```typescript
+const agent = new Agent({
+  name: "Healer",
+  skills: ["antigravity"],  // Skill IDs
+  tools: ["browser"],       // Separate from skills
+});
+```
+
+Or in YAML job definitions:
+
+```yaml
+name: Antigravity Healer
+skills:
+  - antigravity
+tools:
+  - browser
+prompt: |
+  Call antigravity_check_and_heal to monitor health.
+```
+
+## Skills vs Tools
+
+| Aspect | Skills | Tools |
+|--------|--------|-------|
+| Purpose | Teach domain knowledge | Provide actions |
+| Loaded as | System prompt instructions | Callable functions |
+| Example | "How to heal Antigravity" | `browser.click()` |
+
+<Aside type="tip">
+Skills encapsulate both *knowledge* (instructions) and *specialized tools* for a specific domain. This follows the "Atomic Skill-Level Healing" principle where detection and recovery are bundled together.
+</Aside>
+
+## Built-in Skills
+
+| Skill | Purpose |
+|-------|---------|
+| `antigravity` | Monitor and heal IDE agent errors |
+| `calculator` | Basic arithmetic (example skill) |
+
+## Creating Custom Skills
+
+1. Create a directory under `src/skills/`:
+   ```
+   src/skills/my-skill/
+   ├── SKILL.md
+   └── index.ts
+   ```
+
+2. Define the SKILL.md with frontmatter and instructions
+
+3. Optionally export tools from `index.ts`
+
+4. Reference by skill ID in agent config

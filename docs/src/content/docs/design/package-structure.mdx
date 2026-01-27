@@ -1,71 +1,124 @@
 ---
-title: "Package Structure & Responsibilities"
+title: "Package Structure & Exports"
+description: "Understanding Viber's single-package architecture and modular exports"
 ---
 
+## Package Overview
 
-## Core Principle
+**Viber** is distributed as a **single unified package** (`@dustland/viber`) for maximum simplicity. All core functionality is available through a single import.
 
-**Viber is a Space-oriented collaborative workspace platform.** Unlike task-oriented frameworks, Viber provides persistent workspaces where artifacts evolve through continuous user-agent collaboration.
+```bash
+npm install @dustland/viber
+```
 
-The `viber` package is the unified runtime engine that manages Spaces, XAgents, artifact evolution, and defines adapter interfaces. Storage implementations are provided by `@viber/local` (SQLite/filesystem) and `@viber/supabase` (cloud).
+```typescript
+import { 
+  ViberAgent, 
+  Agent, 
+  Space,
+  streamText,
+  generateText 
+} from "@dustland/viber";
+```
 
-## Package Responsibilities
+## Internal Architecture
 
-## Framework Structure
-
-Viber is distributed as a **single unified package** (`viber`) with targeted exports for framework integrations. This simplifies dependency management while maintaining modular separation of concerns.
-
-### `viber` (Main Export)
-
-**Import**: `import { ... } from "viber"`
-
-The core runtime engine that allows you to build, orchestrate, and run agents.
-
-**Contains**:
-- **Core Abstractions**: `Agent`, `Space`, `Task`, `Plan`
-- **Orchestration**: `XAgent` (The project manager)
-- **Data Types**: All shared interfaces and configuration types
-- **Server Adapters**: `node` adapter integration
-- **Storage**: Built-in support for `local` (SQLite/FileSystem) and `supabase` (Cloud) persistence logic
-- **Tools**: Standard toolsets for file I/O, browsing, and search
-
-### `viber/react`
-
-**Import**: `import { ... } from "viber/react"`
-
-React integration layer for building custom UIs.
-
-**Contains**:
-- `useAgent`: Hook for connecting to an agent instance
-- `useSpace`: Hook for managing space state
-- `AgentProvider`: Context provider
-
-### `viber/svelte`
-
-**Import**: `import { ... } from "viber/svelte"`
-
-Svelte 5 integration layer using Runes.
-
-**Contains**:
-- `createAgentStore`: Reactive store for agent state
-- `createSpaceStore`: Reactive store for space management
-
-### `viber/defaults` (Internal)
-
-Default configurations for agents, prompts, and tools are bundled within the main package to provide "batteries-included" functionality.
-
----
-
-## Data Flow
+While distributed as one package, Viber is organized into clear subsystems:
 
 ```
-viber (Unified Runtime)
-    ↓ manages
-Space (Persistent Container)
-    ↓ contains
-Artifacts, History, Config
-    ↓ persisted via
-Built-in Storage Adapters (Local/Supabase)
+src/
+├── core/           # Agent, ViberAgent, Space, Task, Plan
+├── daemon/         # Scheduler, cron jobs, background workers
+├── channels/       # DingTalk, WeCom, Telegram integrations
+├── skills/         # Skill registry and domain-specific modules
+├── tools/          # File, Browser, Search, Web, Desktop tools
+├── data/           # DataAdapter interface and implementations
+├── storage/        # SpaceStorage for artifacts and files
+├── state/          # Zustand-based state management
+└── server/         # HTTP API endpoints
+```
+
+## Core Exports
+
+### Agents
+
+```typescript
+import { ViberAgent, Agent } from "@dustland/viber";
+
+// ViberAgent: Full-featured agent with conversation management
+const viber = new ViberAgent({
+  name: "Assistant",
+  provider: "openai",
+  model: "gpt-4o",
+  tools: ["file", "browser"],
+});
+
+// Agent: Lightweight specialist agent
+const researcher = new Agent({
+  name: "Researcher",
+  systemPrompt: "You are a research specialist",
+});
+```
+
+### Space & Storage
+
+```typescript
+import { SpaceManager, SpaceStorageFactory } from "@dustland/viber";
+
+// Access space data
+const space = await SpaceManager.getSpace(spaceId);
+
+// Direct storage access
+const storage = await SpaceStorageFactory.create(spaceId);
+await storage.writeFile("notes.md", content);
+```
+
+### AI SDK Integration
+
+Viber re-exports key AI SDK v6 functions:
+
+```typescript
+import { 
+  streamText, 
+  generateText, 
+  Output 
+} from "@dustland/viber";
+
+// Use directly with Viber agents
+const result = await viber.generateText({
+  messages: [{ role: "user", content: "Hello" }]
+});
+```
+
+## Data Adapters
+
+Storage is abstracted through adapters:
+
+| Adapter | Structured Data | Files | Use Case |
+|---------|-----------------|-------|----------|
+| `LocalAdapter` | JSON files | Filesystem | Development, CLI |
+| `SupabaseAdapter` | PostgreSQL | Supabase Storage | Production, multi-user |
+
+Adapters are selected automatically based on environment:
+
+```typescript
+import { getServerDataAdapter } from "@dustland/viber";
+
+// Returns LocalAdapter or SupabaseAdapter based on config
+const adapter = getServerDataAdapter();
+```
+
+## CLI
+
+Viber includes a CLI for daemon management:
+
+```bash
+# Run Viber daemon (hot-reload in dev)
+pnpm dev
+
+# Production
+viber start
+viber stop
 ```
 
 ## Key Concepts
@@ -74,59 +127,14 @@ Built-in Storage Adapters (Local/Supabase)
 
 ```
 Space (persistent container)
-  └── Mission (user's substantial goal)
-        └── Plan (strategy, evolves)
-              └── Task[] (individual work items)
+  └── Mission (user's goal)
+        └── Plan (evolving strategy)
+              └── Task[] (work items)
 ```
 
-> **Note**: Our "Task" is different from AI SDK's "steps" (multi-turn tool loops). Viber Tasks are higher-level work items.
+### Design Principles
 
-### Mission Lifecycle
-
-```typescript
-// Create a Space and start a Mission
-const space = await XAgent.start("Write my thesis");
-// Creates: Space + Mission("Write my thesis") + initial Plan
-
-// Work on Tasks within the Plan
-await xAgent.chat("Write the introduction"); // Executes Task, creates artifact v1
-await xAgent.chat("Make it more concise"); // Creates artifact v2
-
-// Resume later (next day, next week...)
-const space = await XAgent.resume(spaceId);
-await xAgent.chat("Now work on chapter 2"); // Full context preserved, Plan adapts
-```
-
-### Artifact Evolution
-
-```typescript
-// Artifacts are versioned automatically
-thesis.md
-├── v1: Initial draft
-├── v2: More concise
-├── v3: Added citations
-└── v4: Final polish
-
-// Can access any version
-const v2 = await space.getArtifactVersion("thesis.md", 2);
-```
-
-### Context Accumulation
-
-```typescript
-// Context builds up over the session
-await xAgent.chat("Research topic X"); // Context: research
-await xAgent.chat("Focus on Y aspect"); // Context: research + Y
-await xAgent.chat("Write a summary"); // Context: research + Y + findings
-// XAgent knows everything discussed
-```
-
-## Comparison to Task-Oriented Design
-
-| Aspect        | Task-Oriented         | Space-Oriented (Viber)                      |
-| ------------- | --------------------- | ------------------------------------------- |
-| **Lifecycle** | Start → Execute → End | Create → Collaborate → Pause → Resume → ... |
-| **State**     | Ephemeral             | Persistent                                  |
-| **Artifacts** | Output files          | Living documents with history               |
-| **Context**   | Per-task              | Accumulated across sessions                 |
-| **Use Case**  | Automation scripts    | Document editing, research, collaboration   |
+- **Single Package**: No fragmented `@viber/*` dependencies
+- **Built-in Adapters**: Local and Supabase storage included
+- **AI SDK v6**: Full compatibility with Vercel AI SDK
+- **Modular Tools**: Enable only what you need

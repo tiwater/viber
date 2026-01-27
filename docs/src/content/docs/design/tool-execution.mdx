@@ -23,7 +23,7 @@ Tools are defined with a name, description, parameter schema, and execute functi
 
 ```typescript
 import { z } from "zod";
-import type { CoreTool } from "@viber/core";
+import type { CoreTool } from "@dustland/viber";
 
 const writeFileTool: CoreTool = {
   name: "write_file",
@@ -44,7 +44,7 @@ const writeFileTool: CoreTool = {
 Tools are registered with agents through configuration:
 
 ```typescript
-import { Agent } from "viber";
+import { Agent } from "@dustland/viber";
 
 const agent = new Agent({
   name: "Developer",
@@ -166,16 +166,15 @@ const webBrowseTool: CoreTool = {
 
 ## 6. Built-in Tools
 
-Viber provides a core set of tools in `@viber/tools`:
+Viber provides these tool categories:
 
-| Tool          | Description                  | Category |
-| ------------- | ---------------------------- | -------- |
-| `read_file`   | Read file contents           | File     |
-| `write_file`  | Write content to file        | File     |
-| `list_files`  | List directory contents      | File     |
-| `web_search`  | Search the web               | Search   |
-| `browse_web`  | Browse and extract web pages | Web      |
-| `execute_sql` | Execute database queries     | Database |
+| Tool ID    | Functions                                        | Category |
+| ---------- | ------------------------------------------------ | -------- |
+| `file`     | `createFile`, `readFile`, `deleteFile`, `listFiles`, `moveFile`, `copyFile` | File     |
+| `search`   | `search` (Tavily/Serper)                         | Search   |
+| `web`      | `fetchWebpage`, `crawlWebsite`, `checkUrl`       | Web      |
+| `browser`  | `navigate`, `click`, `type`, `screenshot`        | Browser  |
+| `desktop`  | `captureScreen`, `clickAt`, `typeText`           | Desktop  |
 
 ## 7. Custom Tools
 
@@ -183,7 +182,7 @@ Users can define custom tools following the same pattern:
 
 ```typescript
 import { z } from "zod";
-import type { CoreTool } from "@viber/core";
+import type { CoreTool } from "@dustland/viber";
 
 export const customTool: CoreTool = {
   name: "my_custom_tool",
@@ -206,21 +205,14 @@ const agent = new Agent({
 
 ## 8. MCP Integration
 
-Viber supports the Model Context Protocol (MCP) for integrating external tool servers:
+Viber supports the Model Context Protocol (MCP) for integrating external tool servers. MCP servers are configured via the data adapter:
 
 ```typescript
-import { createMCPToolProvider } from "@viber/tools";
-
-// Connect to an MCP server
-const mcpTools = await createMCPToolProvider({
-  server: "mcp://localhost:3000",
-});
-
-// Use MCP tools with agents
+// MCP tools are loaded automatically from configured servers
 const agent = new Agent({
   name: "MCPAgent",
-  tools: [...mcpTools.getTools()],
+  tools: ["mcp:github", "mcp:supabase"],  // Reference by server ID
 });
 ```
 
-This enables agents to access a vast ecosystem of third-party capabilities without requiring custom code for each integration.
+This enables agents to access external capabilities like GitHub, Supabase, and other MCP-compatible services.

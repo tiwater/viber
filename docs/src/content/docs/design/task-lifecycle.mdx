@@ -33,11 +33,11 @@ While Spaces persist indefinitely, **user sessions** within a Space have states:
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Created: XAgent.start()
+    [*] --> Created: ViberAgent.start()
     Created --> Active: First message
     Active --> Active: Conversation continues
     Active --> Paused: User leaves
-    Paused --> Active: XAgent.resume()
+    Paused --> Active: ViberAgent.resume()
     Active --> Archived: User archives
     Archived --> Active: User restores
 ```
@@ -46,11 +46,11 @@ Note: These are **session states**, not Space states. The Space itself persists 
 
 ## Phase 1: Mission Creation
 
-When a user starts a new project, XAgent creates a Space and begins the first Mission:
+When a user starts a new project, ViberAgent creates a Space and begins the first Mission:
 
 ```typescript
 // User initiates
-const space = await XAgent.start("Write my thesis on climate change");
+const space = await ViberAgent.start("Write my thesis on climate change");
 // Creates: Space + Mission("Write my thesis on climate change")
 ```
 
@@ -59,18 +59,18 @@ What happens internally:
 ```mermaid
 sequenceDiagram
     actor User
-    participant XAgent
+    participant ViberAgent
     participant Space
     participant Mission
     participant Storage
 
-    User->>XAgent: start("Write my thesis...")
-    XAgent->>Space: Create new Space
+    User->>ViberAgent: start("Write my thesis...")
+    ViberAgent->>Space: Create new Space
     Space->>Mission: Create Mission with goal
     Mission->>Mission: Initialize Plan
     Space->>Storage: Persist initial state
-    XAgent->>XAgent: Attach to Space
-    XAgent-->>User: Space ready
+    ViberAgent->>ViberAgent: Attach to Space
+    ViberAgent-->>User: Space ready
 ```
 
 **Created State:**
@@ -78,7 +78,7 @@ sequenceDiagram
 - Empty artifact list
 - Fresh conversation history
 - Mission with initial Plan
-- XAgent attached and ready
+- ViberAgent attached and ready
 
 ## Phase 2: Active Collaboration
 
@@ -89,25 +89,25 @@ The core of Viber—continuous iteration on artifacts through conversation.
 ```mermaid
 sequenceDiagram
     actor User
-    participant XAgent
+    participant ViberAgent
     participant Mission
     participant Task
     participant Artifact
 
     loop Continuous Collaboration
-        User->>XAgent: "Write the introduction"
-        XAgent->>Mission: Get current Task
-        XAgent->>XAgent: Generate content
-        XAgent->>Artifact: Create/Update
+        User->>ViberAgent: "Write the introduction"
+        ViberAgent->>Mission: Get current Task
+        ViberAgent->>ViberAgent: Generate content
+        ViberAgent->>Artifact: Create/Update
         Artifact->>Artifact: Version++
-        XAgent->>Task: Mark complete
-        XAgent-->>User: "Here's the introduction..."
+        ViberAgent->>Task: Mark complete
+        ViberAgent-->>User: "Here's the introduction..."
 
-        User->>XAgent: "Make it more concise"
-        XAgent->>Artifact: Read current version
-        XAgent->>XAgent: Edit content
-        XAgent->>Artifact: Update (new version)
-        XAgent-->>User: "I've made it more concise..."
+        User->>ViberAgent: "Make it more concise"
+        ViberAgent->>Artifact: Read current version
+        ViberAgent->>ViberAgent: Edit content
+        ViberAgent->>Artifact: Update (new version)
+        ViberAgent-->>User: "I've made it more concise..."
     end
 ```
 
@@ -130,8 +130,8 @@ Example evolution:
 
 ```
 thesis.md
-├── v1: Initial draft (by XAgent, "Write the introduction")
-├── v2: More concise (by XAgent, "Make it more concise")
+├── v1: Initial draft (by ViberAgent, "Write the introduction")
+├── v2: More concise (by ViberAgent, "Make it more concise")
 ├── v3: Added citations (by Researcher agent)
 └── v4: Final polish (by Editor agent)
 ```
@@ -161,7 +161,7 @@ What's preserved:
 
 ```typescript
 // Next day, next week, next month...
-const space = await XAgent.resume("space_abc123");
+const space = await ViberAgent.resume("space_abc123");
 ```
 
 What happens:
@@ -169,22 +169,22 @@ What happens:
 ```mermaid
 sequenceDiagram
     actor User
-    participant XAgent
+    participant ViberAgent
     participant Storage
     participant Space
     participant Mission
 
-    User->>XAgent: resume(spaceId)
-    XAgent->>Storage: Load Space data
-    Storage-->>XAgent: Space, Mission, History, Artifacts
-    XAgent->>Space: Reconstruct state
-    XAgent->>Mission: Get current Task
-    XAgent->>XAgent: Attach to Space
-    XAgent-->>User: "Welcome back! We were working on..."
+    User->>ViberAgent: resume(spaceId)
+    ViberAgent->>Storage: Load Space data
+    Storage-->>ViberAgent: Space, Mission, History, Artifacts
+    ViberAgent->>Space: Reconstruct state
+    ViberAgent->>Mission: Get current Task
+    ViberAgent->>ViberAgent: Attach to Space
+    ViberAgent-->>User: "Welcome back! We were working on..."
 
-    Note over XAgent: XAgent has full context
-    User->>XAgent: "Continue with chapter 2"
-    XAgent->>XAgent: Uses accumulated context
+    Note over ViberAgent: ViberAgent has full context
+    User->>ViberAgent: "Continue with chapter 2"
+    ViberAgent->>ViberAgent: Uses accumulated context
 ```
 
 ## Mission Lifecycle States
@@ -245,7 +245,7 @@ await space.uploadArtifact("proposal.docx", content);
 
 // Iterative refinement
 await xAgent.chat("Review and suggest improvements");
-// XAgent reads proposal.docx, provides feedback
+// ViberAgent reads proposal.docx, provides feedback
 
 await xAgent.chat("Apply the suggestions");
 // Updates: proposal.docx v2
@@ -261,21 +261,21 @@ Unlike static workflows, Viber Plans adapt based on conversation:
 ```mermaid
 sequenceDiagram
     actor User
-    participant XAgent
+    participant ViberAgent
     participant Mission
     participant Plan
 
-    User->>XAgent: "Write a research paper"
-    XAgent->>Mission: Create Mission
+    User->>ViberAgent: "Write a research paper"
+    ViberAgent->>Mission: Create Mission
     Mission->>Plan: Generate initial Plan
     Note over Plan: Tasks:<br/>1. Research<br/>2. Outline<br/>3. Draft<br/>4. Review
 
-    User->>XAgent: "Actually, focus on methodology first"
-    XAgent->>Plan: Adapt Plan
+    User->>ViberAgent: "Actually, focus on methodology first"
+    ViberAgent->>Plan: Adapt Plan
     Note over Plan: Tasks:<br/>1. Methodology<br/>2. Research<br/>3. Draft<br/>4. Review
 
-    User->>XAgent: "Skip the outline, I have one"
-    XAgent->>Plan: Adapt Plan
+    User->>ViberAgent: "Skip the outline, I have one"
+    ViberAgent->>Plan: Adapt Plan
     Note over Plan: Tasks:<br/>1. Methodology<br/>2. Research<br/>3. Draft (use existing)<br/>4. Review
 ```
 
@@ -297,7 +297,7 @@ await xAgent.chat("Focus on agriculture impacts");
 
 await xAgent.chat("Write a summary");
 // Context: research + agriculture + all findings
-// XAgent knows everything discussed
+// ViberAgent knows everything discussed
 ```
 
 ### Context Window Management
@@ -322,19 +322,19 @@ interface ContextManager {
 
 ## Execution Engine Integration
 
-For complex multi-step operations, XAgent can invoke the internal Execution Engine:
+For complex multi-step operations, ViberAgent can invoke the internal Execution Engine:
 
 ```mermaid
 sequenceDiagram
     actor User
-    participant XAgent
+    participant ViberAgent
     participant Mission
     participant Engine
     participant Agents
 
-    User->>XAgent: "Analyze this dataset and create a report"
-    XAgent->>Mission: Get current Task
-    XAgent->>Engine: Execute Task workflow
+    User->>ViberAgent: "Analyze this dataset and create a report"
+    ViberAgent->>Mission: Get current Task
+    ViberAgent->>Engine: Execute Task workflow
 
     loop Task Execution
         Engine->>Agents: Invoke specialist
@@ -342,9 +342,9 @@ sequenceDiagram
         Engine->>Engine: Update context
     end
 
-    Engine-->>XAgent: Task complete
-    XAgent->>Mission: Update Plan progress
-    XAgent-->>User: "Report ready..."
+    Engine-->>ViberAgent: Task complete
+    ViberAgent->>Mission: Update Plan progress
+    ViberAgent-->>User: "Report ready..."
 ```
 
 ### Human-in-the-Loop
