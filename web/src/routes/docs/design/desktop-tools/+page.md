@@ -2,13 +2,12 @@
 title: "Desktop Tools"
 description: GUI automation and desktop control using UI-TARS for Viber agents
 ---
+
 import { Aside } from "$lib/components/docs";
-
-
 
 ## Overview
 
-<Badge text="Experimental" variant="caution" />
+_Experimental_
 
 Desktop Tools enable Viber agents to interact with graphical user interfaces through **visual understanding and control**. Using the UI-TARS framework, agents can see the screen, understand UI elements, and perform mouse/keyboard actions like a human user.
 
@@ -75,6 +74,7 @@ Execute complex GUI tasks via natural language:
 ```
 
 **Example usage by agent:**
+
 ```
 Agent calls: desktop_execute({ instruction: "Open Chrome and search for AI news" })
 ```
@@ -139,6 +139,7 @@ Desktop tools require a UI-TARS model endpoint:
 ```
 
 **Environment variables:**
+
 ```bash
 UI_TARS_BASE_URL=https://your-ui-tars-endpoint
 UI_TARS_API_KEY=your-api-key
@@ -146,11 +147,11 @@ UI_TARS_API_KEY=your-api-key
 
 ## Model Options
 
-| Model | Size | Provider | Best For |
-|-------|------|----------|----------|
-| UI-TARS-1.5-7B | 7B | Hugging Face | Local deployment |
-| Seed-1.5-VL | Varies | ByteDance | Cloud API |
-| Claude 3.5 Sonnet | - | Anthropic | General purpose |
+| Model             | Size   | Provider     | Best For         |
+| ----------------- | ------ | ------------ | ---------------- |
+| UI-TARS-1.5-7B    | 7B     | Hugging Face | Local deployment |
+| Seed-1.5-VL       | Varies | ByteDance    | Cloud API        |
+| Claude 3.5 Sonnet | -      | Anthropic    | General purpose  |
 
 ## Usage
 
@@ -171,7 +172,7 @@ tools:
   - file
   - search
   - web
-  - desktop  # Enable desktop tools
+  - desktop # Enable desktop tools
 ```
 
 ## Execution Flow
@@ -201,6 +202,7 @@ When `desktop_execute` is called:
 </Aside>
 
 **Safety measures:**
+
 - Requires explicit `--desktop` flag to enable
 - Actions logged for audit trail
 - Abort support via `AbortController`
@@ -208,19 +210,21 @@ When `desktop_execute` is called:
 
 ## Limitations
 
-| Limitation | Description |
-|------------|-------------|
-| **Model dependency** | Requires UI-TARS or compatible VLM |
-| **Platform support** | Currently macOS, Windows, Linux |
-| **Performance** | Each step requires screenshot + model call |
-| **Accuracy** | VLM may misinterpret complex UIs |
+| Limitation           | Description                                |
+| -------------------- | ------------------------------------------ |
+| **Model dependency** | Requires UI-TARS or compatible VLM         |
+| **Platform support** | Currently macOS, Windows, Linux            |
+| **Performance**      | Each step requires screenshot + model call |
+| **Accuracy**         | VLM may misinterpret complex UIs           |
 
 ## Example: Full Desktop Task
 
 ```typescript
 // Agent receives goal: "Create a slide about AI"
 const result = await agent.streamText({
-  messages: [{ role: "user", content: "Create a slide about AI in PowerPoint" }],
+  messages: [
+    { role: "user", content: "Create a slide about AI in PowerPoint" },
+  ],
   tools: ["file", "desktop"],
 });
 

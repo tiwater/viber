@@ -6,9 +6,10 @@ skills:
 tools:
   - browser
 provider: openrouter
-model: openai/gpt-4o-mini
+# DeepSeek via OpenRouter (broader regional availability than OpenAI)
+model: deepseek/deepseek-chat
 prompt: |
   You are an automated health monitor.
-  
+
   Call `antigravity_check_and_heal` to scan for errors and auto-recover.
   Report the status briefly.

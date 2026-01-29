@@ -94,7 +94,7 @@ export class Agent {
 
     if (this.provider === "viber" || this.provider?.startsWith("viber-")) {
       throw new Error(
-        `Invalid provider '${this.provider}' for agent '${this.name}'. Viber is not an AI provider.`
+        `Invalid provider '${this.provider}' for agent '${this.name}'. Viber is not an AI provider.`,
       );
     }
 
@@ -159,12 +159,19 @@ export class Agent {
     }
 
     // Tool usage instructions
-    if ((this.tools && this.tools.length > 0) || Object.keys(this.loadedSkillTools).length > 0) {
+    if (
+      (this.tools && this.tools.length > 0) ||
+      Object.keys(this.loadedSkillTools).length > 0
+    ) {
       segments.push("\nIMPORTANT - TOOL USAGE:");
       segments.push("You have tools available. To use a tool, you MUST:");
       segments.push("1. Use the tool calling mechanism provided by the system");
-      segments.push("2. NEVER output tool calls as JSON, code blocks, or plain text");
-      segments.push("When you need to call a tool, simply invoke it directly without any formatting.");
+      segments.push(
+        "2. NEVER output tool calls as JSON, code blocks, or plain text",
+      );
+      segments.push(
+        "When you need to call a tool, simply invoke it directly without any formatting.",
+      );
     }
 
     // Custom system prompt
@@ -181,7 +188,11 @@ export class Agent {
       if (context.metadata) {
         // Add metadata fields
         for (const [key, value] of Object.entries(context.metadata)) {
-          if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+          if (
+            typeof value === "string" ||
+            typeof value === "number" ||
+            typeof value === "boolean"
+          ) {
             segments.push(`- ${key}: ${value}`);
           }
         }
@@ -200,7 +211,10 @@ export class Agent {
   /**
    * Get the model provider for this agent
    */
-  public getModel(context?: { spaceId?: string; userId?: string }): LanguageModel {
+  public getModel(context?: {
+    spaceId?: string;
+    userId?: string;
+  }): LanguageModel {
     const modelProvider = getModelProvider({
       provider: this.provider as any,
       modelName: this.model,
@@ -208,9 +222,13 @@ export class Agent {
       userId: context?.userId,
     });
 
-    // All providers (OpenAI, Anthropic, DeepSeek) are functions
-    // that need to be called with the model name
-    return (modelProvider as any)(this.model) as LanguageModel;
+    // OpenRouter API expects upstream provider/model only (e.g. "deepseek/deepseek-chat"), not "openrouter/..."
+    const modelForApi =
+      this.provider === "openrouter" && this.model.startsWith("openrouter/")
+        ? this.model.slice("openrouter/".length)
+        : this.model;
+
+    return (modelProvider as any)(modelForApi) as LanguageModel;
   }
 
   /**
@@ -282,9 +300,9 @@ export class Agent {
             ? m.content
             : Array.isArray(m.content)
               ? (m.content as Array<{ type: string; text?: string }>)
-                .filter((p) => p.type === "text" && p.text)
-                .map((p) => p.text as string)
-                .join("\n")
+                  .filter((p) => p.type === "text" && p.text)
+                  .map((p) => p.text as string)
+                  .join("\n")
               : "",
       }))
       .filter((m) => m.content);
@@ -377,9 +395,9 @@ export class Agent {
             ? m.content
             : Array.isArray(m.content)
               ? (m.content as Array<{ type: string; text?: string }>)
-                .filter((p) => p.type === "text" && p.text)
-                .map((p) => p.text as string)
-                .join("\n")
+                  .filter((p) => p.type === "text" && p.text)
+                  .map((p) => p.text as string)
+                  .join("\n")
               : "",
       }))
       .filter((m) => m.content); // Remove empty messages
@@ -473,9 +491,9 @@ export class Agent {
             ? m.content
             : Array.isArray(m.content)
               ? (m.content as Array<{ type: string; text?: string }>)
-                .filter((p) => p.type === "text" && p.text)
-                .map((p) => p.text as string)
-                .join("\n")
+                  .filter((p) => p.type === "text" && p.text)
+                  .map((p) => p.text as string)
+                  .join("\n")
               : "",
       }))
       .filter((m) => m.content);
@@ -496,7 +514,6 @@ export class Agent {
       ...(this.presencePenalty && { presencePenalty: this.presencePenalty }),
     });
   }
-
 
   /**
    * Get agent summary

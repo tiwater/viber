@@ -81,8 +81,9 @@
     };
     messages = [...messages, userMessage];
 
+    let pollingStarted = false;
+
     try {
-      // Submit task to viber
       const response = await fetch(`/api/vibers/${viber.id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -96,28 +97,73 @@
       const { taskId } = await response.json();
       currentTaskId = taskId;
 
-      // Add pending assistant message
+      const assistantMessageId = `msg-${Date.now()}-assistant`;
       const assistantMessage: Message = {
-        id: `msg-${Date.now()}-assistant`,
+        id: assistantMessageId,
         role: "assistant",
         content: "Processing task...",
         createdAt: new Date(),
       };
       messages = [...messages, assistantMessage];
 
-      // TODO: Subscribe to task updates via WebSocket/SSE
-      // For now, show a placeholder
-      setTimeout(() => {
-        messages = messages.map((m) =>
-          m.id === assistantMessage.id
-            ? {
-                ...m,
-                content:
-                  "Task submitted to viber. Real-time updates coming soon.",
-              }
-            : m,
-        );
-      }, 1000);
+      const pollInterval = 1200;
+      const maxAttempts = 120;
+      let attempts = 0;
+
+      const poll = async (): Promise<boolean> => {
+        try {
+          const taskRes = await fetch(`/api/tasks/${taskId}`);
+          if (!taskRes.ok) return false;
+          const task = await taskRes.json();
+          if (task.status === "completed") {
+            const text =
+              (task.result?.text as string)?.trim() ||
+              task.result?.summary ||
+              "(No response text)";
+            messages = messages.map((m) =>
+              m.id === assistantMessageId ? { ...m, content: text } : m,
+            );
+            return true;
+          }
+          if (task.status === "error") {
+            messages = messages.map((m) =>
+              m.id === assistantMessageId
+                ? { ...m, content: `Error: ${task.error || "Task failed"}` }
+                : m,
+            );
+            return true;
+          }
+        } catch (_) {
+          /* ignore */
+        }
+        return false;
+      };
+
+      pollingStarted = true;
+      const intervalId = setInterval(async () => {
+        attempts++;
+        const done = await poll();
+        if (done || attempts >= maxAttempts) {
+          clearInterval(intervalId);
+          if (attempts >= maxAttempts) {
+            const last = await poll();
+            if (!last) {
+              messages = messages.map((m) =>
+                m.id === assistantMessageId
+                  ? { ...m, content: "Task timed out. No response received." }
+                  : m,
+              );
+            }
+          }
+          sending = false;
+        }
+      }, pollInterval);
+
+      const done = await poll();
+      if (done) {
+        clearInterval(intervalId);
+        sending = false;
+      }
     } catch (error) {
       console.error("Failed to send message:", error);
       const errorMessage: Message = {
@@ -128,7 +174,9 @@
       };
       messages = [...messages, errorMessage];
     } finally {
-      sending = false;
+      if (!pollingStarted) {
+        sending = false;
+      }
     }
   }
 

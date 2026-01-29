@@ -6,7 +6,7 @@ description: A general-purpose assistant that can help with various tasks
 
 # LLM configuration
 provider: openrouter
-model: openrouter/deepseek/deepseek-chat
+model: deepseek/deepseek-chat
 temperature: 0.7
 maxTokens: 4096
 

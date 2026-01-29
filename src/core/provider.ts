@@ -70,7 +70,8 @@ export function getModelProvider(config: ModelConfig) {
 
       // Use Helicone gateway for observability if configured
       if (process.env.HELICONE_API_KEY) {
-        openrouterConfig.baseURL = baseURL || "https://openrouter.helicone.ai/api/v1";
+        openrouterConfig.baseURL =
+          baseURL || "https://openrouter.helicone.ai/api/v1";
         openrouterConfig.headers = {
           "Helicone-Auth": `Bearer ${process.env.HELICONE_API_KEY}`,
           "Helicone-Property-User": userId || "anonymous",
@@ -86,7 +87,7 @@ export function getModelProvider(config: ModelConfig) {
       // by providing the appropriate imports and configuration
       throw new Error(
         `Provider '${provider}' is not configured. ` +
-        `To use ${provider}, add the appropriate AI SDK provider import and configuration to core/provider.ts`
+          `To use ${provider}, add the appropriate AI SDK provider import and configuration to core/provider.ts`,
       );
   }
 }
@@ -152,10 +153,13 @@ export function parseModelString(model: string): ModelConfig {
     return { provider: "deepseek", modelName: model };
   }
 
-  // Models with "/" are OpenRouter format (e.g., "openai/gpt-4o-mini", "anthropic/claude-3.5-sonnet")
-  // This matches OpenRouter's namespace convention: provider/model
+  // Models with "/" are OpenRouter format (e.g., "deepseek/deepseek-chat", "openai/gpt-4o-mini")
+  // OpenRouter API expects upstream provider/model only — never prefix with "openrouter/"
   if (model.includes("/")) {
-    return { provider: "openrouter", modelName: model };
+    const modelName = model.startsWith("openrouter/")
+      ? model.slice("openrouter/".length)
+      : model;
+    return { provider: "openrouter", modelName };
   }
 
   // Simple model names default to OpenAI (e.g., "gpt-4o", "gpt-4o-mini")

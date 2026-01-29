@@ -2,9 +2,8 @@
 title: "Spaces"
 description: Organize conversations, artifacts, and tasks
 ---
+
 import { Aside } from "$lib/components/docs";
-
-
 
 ## Overview
 
@@ -13,31 +12,31 @@ Spaces provide isolated workspaces for organizing agent conversations, generated
 ## Creating a Space
 
 ```typescript
-import { Space } from 'viber';
+import { Space } from "viber";
 
 const space = new Space({
-  name: 'my-project',
-  rootPath: './workspaces/my-project',
+  name: "my-project",
+  rootPath: "./workspaces/my-project",
 });
 ```
 
 ## Space Structure
 
-<FileTree>
-- my-project/
-  - .viber/
-    - config.json
-    - history/
-    - artifacts/
-  - outputs/
-</FileTree>
+```
+my-project/
+  .viber/
+    config.json
+    history/
+    artifacts/
+  outputs/
+```
 
 ## Configuration
 
 ```typescript
 const space = new Space({
-  name: 'research-project',
-  rootPath: './workspaces/research',
+  name: "research-project",
+  rootPath: "./workspaces/research",
   config: {
     maxHistoryItems: 100,
     autoSaveInterval: 5000,
@@ -45,25 +44,25 @@ const space = new Space({
 });
 ```
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `name` | `string` | required | Space identifier |
-| `rootPath` | `string` | required | Filesystem path |
-| `maxHistoryItems` | `number` | `1000` | History retention limit |
-| `autoSaveInterval` | `number` | `10000` | Auto-save interval (ms) |
+| Option             | Type     | Default  | Description             |
+| ------------------ | -------- | -------- | ----------------------- |
+| `name`             | `string` | required | Space identifier        |
+| `rootPath`         | `string` | required | Filesystem path         |
+| `maxHistoryItems`  | `number` | `1000`   | History retention limit |
+| `autoSaveInterval` | `number` | `10000`  | Auto-save interval (ms) |
 
 ## Using Spaces with Agents
 
 ```typescript
 const agent = new Agent({
-  name: 'Researcher',
-  model: 'openai:gpt-4o',
+  name: "Researcher",
+  model: "openai:gpt-4o",
   space, // Associate with a space
 });
 
 // Artifacts are automatically saved to the space
 await agent.streamText({
-  messages: [{ role: 'user', content: 'Research AI trends' }],
+  messages: [{ role: "user", content: "Research AI trends" }],
 });
 ```
 
@@ -74,10 +73,10 @@ await agent.streamText({
 const artifacts = await space.listArtifacts();
 
 // Read a specific artifact
-const content = await space.readArtifact('report.md');
+const content = await space.readArtifact("report.md");
 
 // Save an artifact
-await space.saveArtifact('summary.txt', 'Key findings...');
+await space.saveArtifact("summary.txt", "Key findings...");
 ```
 
 <Aside type="tip">

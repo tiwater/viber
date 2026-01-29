@@ -101,7 +101,7 @@ export class Space {
     this.parallelEngine = new ParallelExecutionEngine(this);
     this.collaborativePlanner = new CollaborativePlanner(
       this,
-      this.collaborationManager
+      this.collaborationManager,
     );
   }
 
@@ -145,7 +145,7 @@ export class Space {
    */
   updateSpaceTaskStatus(
     taskId: string,
-    status: "active" | "completed" | "archived"
+    status: "active" | "completed" | "archived",
   ): boolean {
     const task = this.tasks.get(taskId);
     if (task) {
@@ -194,7 +194,7 @@ export class Space {
     this.plan = plan;
     await this.persistState();
     console.log(
-      `Created plan for space ${this.spaceId} with ${plan.tasks.length} tasks`
+      `Created plan for space ${this.spaceId} with ${plan.tasks.length} tasks`,
     );
   }
 
@@ -332,7 +332,7 @@ export class Space {
       const taskStats = {
         total: this.plan.tasks.length,
         completed: this.plan.tasks.filter(
-          (t) => t.status === TaskStatus.COMPLETED
+          (t) => t.status === TaskStatus.COMPLETED,
         ).length,
         running: this.plan.tasks.filter((t) => t.status === TaskStatus.RUNNING)
           .length,
@@ -409,7 +409,7 @@ export async function startSpace({
     name: "Viber",
     description: "I manage this space and coordinate all work.",
     provider: "openrouter",
-    model: model || "openrouter/deepseek/deepseek-chat",
+    model: model || "deepseek/deepseek-chat",
     temperature: 0.7,
     promptFile: "", // ViberAgent doesn't use prompt files
   };

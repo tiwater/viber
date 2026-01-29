@@ -28,7 +28,9 @@ program
 
 program
   .command("start")
-  .description("Start viber with all apps (local mode, or connect to server with --server)")
+  .description(
+    "Start viber with all apps (local mode, or connect to server with --server)",
+  )
   .option("-s, --server <url>", "Command center URL (enables connected mode)")
   .option("-t, --token <token>", "Authentication token (or set VIBER_TOKEN)")
   .option("-n, --name <name>", "Viber name", `${os.hostname()}-viber`)
@@ -53,8 +55,12 @@ program
     const connectToServer = options.server && token;
 
     if (options.server && !token) {
-      console.error("Error: Authentication token required when using --server.");
-      console.error("Use --token <token> or set VIBER_TOKEN environment variable.");
+      console.error(
+        "Error: Authentication token required when using --server.",
+      );
+      console.error(
+        "Use --token <token> or set VIBER_TOKEN environment variable.",
+      );
       console.error("\nTo get a token, run: viber login");
       process.exit(1);
     }
@@ -134,7 +140,7 @@ Running locally. Press Ctrl+C to stop.
       `);
 
       // Keep process alive
-      await new Promise(() => { });
+      await new Promise(() => {});
     }
   });
 
@@ -143,7 +149,7 @@ Running locally. Press Ctrl+C to stop.
 program
   .command("run <goal>")
   .description("Run a task locally without connecting to command center")
-  .option("-m, --model <model>", "LLM model to use", "openrouter/deepseek/deepseek-chat")
+  .option("-m, --model <model>", "LLM model to use", "deepseek/deepseek-chat")
   .option("-a, --agent <agent>", "Single agent to use")
   .option("--desktop", "Enable desktop control")
   .action(async (goal, options) => {
@@ -205,7 +211,9 @@ program
     console.log("[Viber] Opening browser for authentication...");
     console.log(`\nVisit: ${options.server}/vibers/register`);
     console.log("\nAfter authentication, you'll receive a token.");
-    console.log("Set it as VIBER_TOKEN environment variable or use --token option.\n");
+    console.log(
+      "Set it as VIBER_TOKEN environment variable or use --token option.\n",
+    );
 
     // Try to open browser
     try {
@@ -291,7 +299,10 @@ async function getViberId(): Promise<string> {
     return id.trim();
   } catch {
     // Generate new ID
-    const id = `viber-${os.hostname().toLowerCase().replace(/[^a-z0-9]/g, "")}-${Date.now().toString(36).slice(-6)}`;
+    const id = `viber-${os
+      .hostname()
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "")}-${Date.now().toString(36).slice(-6)}`;
     await fs.writeFile(idFile, id);
     return id;
   }
