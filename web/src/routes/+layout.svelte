@@ -14,6 +14,9 @@
     Circle,
     Lightbulb,
     ChevronDown,
+    Terminal as TerminalIcon,
+    Server,
+    BookOpen,
   } from "lucide-svelte";
 
   let { children } = $props();
@@ -24,19 +27,6 @@
     if (skillsButtonEl && !skillsButtonEl.contains(e.target as Node)) {
       const popover = document.getElementById("skills-popover");
       if (popover && !popover.contains(e.target as Node)) skillsOpen = false;
-    }
-  }
-
-  function formatPlatform(platform: string | null): string {
-    switch (platform) {
-      case "darwin":
-        return "macOS";
-      case "linux":
-        return "Linux";
-      case "win32":
-        return "Windows";
-      default:
-        return platform || "Unknown";
     }
   }
 
@@ -60,9 +50,8 @@
 </script>
 
 <div class="h-screen bg-background flex flex-col overflow-hidden">
-  <!-- Single merged header row: nav + viber context + tabs + actions -->
   <header class="border-b border-border shrink-0">
-    <nav class="flex items-center gap-2 px-2 py-1.5 text-sm min-h-9 flex-wrap">
+    <nav class="flex items-center gap-1.5 px-2 py-1 text-sm min-h-8 flex-wrap">
       <a
         href="/"
         class="font-semibold text-foreground flex items-center gap-1.5 shrink-0"
@@ -88,22 +77,12 @@
           {$headerStore.viber.viberName}
         </span>
         {#if $headerStore.viber.isConnected}
-          <Badge
-            variant="default"
-            class="bg-green-500/20 text-green-700 dark:text-green-400 border-0 text-[10px] px-1.5 py-0 shrink-0"
-          >
-            <Circle class="size-1.5 mr-0.5 fill-current"></Circle>
-            Online
-          </Badge>
+          <span class="text-green-600 dark:text-green-400 shrink-0" title="Online">
+            <Circle class="size-1.5 fill-current inline" aria-hidden="true"></Circle>
+          </span>
         {:else}
-          <Badge variant="secondary" class="text-[10px] px-1.5 py-0 shrink-0">
-            <Circle class="size-1.5 mr-0.5"></Circle>
-            Offline
-          </Badge>
-        {/if}
-        {#if $headerStore.viber.platform}
-          <span class="text-muted-foreground text-xs shrink-0 hidden sm:inline">
-            {formatPlatform($headerStore.viber.platform)}
+          <span class="text-muted-foreground shrink-0" title="Offline">
+            <Circle class="size-1.5 inline" aria-hidden="true"></Circle>
           </span>
         {/if}
         <span
@@ -120,9 +99,22 @@
               ? 'bg-background text-foreground shadow-sm'
               : 'text-muted-foreground hover:text-foreground'}"
             onclick={() => headerStore.setActiveTab("chat")}
+            title="Chat"
           >
-            <MessageSquare class="size-3" />
-            Chat
+            <MessageSquare class="size-3 shrink-0" />
+            <span class="hidden sm:inline">Chat</span>
+          </button>
+          <button
+            type="button"
+            class="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium transition-colors {$headerStore
+              .viber.activeTab === 'terminals'
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'}"
+            onclick={() => headerStore.setActiveTab("terminals")}
+            title="Terminals"
+          >
+            <TerminalIcon class="size-3 shrink-0" />
+            <span class="hidden sm:inline">Terminals</span>
           </button>
           <button
             type="button"
@@ -131,9 +123,10 @@
               ? 'bg-background text-foreground shadow-sm'
               : 'text-muted-foreground hover:text-foreground'}"
             onclick={() => headerStore.setActiveTab("dev-server")}
+            title="Dev Server"
           >
-            <Monitor class="size-3" />
-            Dev Server
+            <Monitor class="size-3 shrink-0" />
+            <span class="hidden sm:inline">Dev Server</span>
           </button>
         </div>
         <!-- Skills: what this viber can do + how to use -->
@@ -147,11 +140,12 @@
                 e.stopPropagation();
                 skillsOpen = !skillsOpen;
               }}
+              title="Skills"
             >
-              <Lightbulb class="size-3" />
-              Skills ({$headerStore.viber.skills.length})
+              <Lightbulb class="size-3 shrink-0" />
+              <span class="hidden sm:inline">Skills ({$headerStore.viber.skills.length})</span>
               <ChevronDown
-                class="size-3 transition-transform {skillsOpen
+                class="size-3 shrink-0 transition-transform hidden sm:block {skillsOpen
                   ? 'rotate-180'
                   : ''}"
               />
@@ -201,37 +195,45 @@
           </Button>
           <a
             href="/vibers"
-            class="text-muted-foreground hover:text-foreground text-xs px-1.5 py-0.5 rounded transition-colors"
+            class="flex items-center gap-1 text-muted-foreground hover:text-foreground text-xs px-1.5 py-0.5 rounded transition-colors"
+            title="Vibers"
           >
-            Vibers
+            <Server class="size-3 shrink-0" />
+            <span class="hidden sm:inline">Vibers</span>
           </a>
           <a
             href="/docs"
-            class="text-muted-foreground hover:text-foreground text-xs px-1.5 py-0.5 rounded transition-colors"
+            class="flex items-center gap-1 text-muted-foreground hover:text-foreground text-xs px-1.5 py-0.5 rounded transition-colors"
+            title="Docs"
           >
-            Docs
+            <BookOpen class="size-3 shrink-0" />
+            <span class="hidden sm:inline">Docs</span>
           </a>
         </div>
       {:else}
-        <div class="flex items-center gap-2 ml-auto">
+        <div class="flex items-center gap-1 ml-auto">
           <a
             href="/vibers"
-            class="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+            class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors shrink-0 px-1.5 py-0.5 rounded"
+            title="Vibers"
           >
-            Vibers
+            <Server class="size-3 shrink-0" />
+            <span class="hidden sm:inline">Vibers</span>
           </a>
           <a
             href="/docs"
-            class="text-muted-foreground hover:text-foreground transition-colors shrink-0"
+            class="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors shrink-0 px-1.5 py-0.5 rounded"
+            title="Docs"
           >
-            Docs
+            <BookOpen class="size-3 shrink-0" />
+            <span class="hidden sm:inline">Docs</span>
           </a>
         </div>
       {/if}
     </nav>
   </header>
 
-  <main class="flex-1 min-h-0 flex flex-col overflow-y-auto">
+  <main class="flex-1 min-h-0 flex flex-col">
     {@render children()}
   </main>
 </div>
