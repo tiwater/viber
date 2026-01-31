@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { RefreshCw, ExternalLink } from "lucide-svelte";
+  import { RefreshCw, ExternalLink } from "@lucide/svelte";
   import { Button } from "$lib/components/ui/button";
 
   const DEFAULT_URL = "http://localhost:6006";

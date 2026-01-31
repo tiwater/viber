@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Info, Lightbulb, AlertTriangle, AlertCircle } from "lucide-svelte";
+  import { Info, Lightbulb, AlertTriangle, AlertCircle } from "@lucide/svelte";
 
   interface Props {
     type?: "note" | "tip" | "caution" | "danger";

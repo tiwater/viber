@@ -11,7 +11,8 @@
   },
   "packageManager": "pnpm@10.15.0",
   "scripts": {
-    "dev": "concurrently -n web,viber \"cd web && pnpm dev\" \"tsx watch src/cli/index.ts start\"",
+    "dev": "concurrently -n hub,web,viber \"tsx watch src/cli/index.ts hub\" \"cd web && pnpm dev\" \"tsx watch src/cli/index.ts start\"",
+    "dev:hub": "tsx watch src/cli/index.ts hub",
     "dev:viber": "tsx watch src/cli/index.ts start",
     "dev:web": "cd web && pnpm dev",
     "build": "tsup",

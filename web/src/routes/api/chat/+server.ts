@@ -1,7 +1,5 @@
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
-import { db, schema } from "$lib/server/db";
-import { eq } from "drizzle-orm";
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
@@ -12,19 +10,9 @@ export const POST: RequestHandler = async ({ request }) => {
     const body = await request.json();
     const { viberId, messages, stream = true } = body;
 
-    // If viberId is provided, try to use the viber's endpoint
-    if (viberId) {
-      const viber = await db
-        .select()
-        .from(schema.vibers)
-        .where(eq(schema.vibers.id, viberId))
-        .get();
-
-      if (viber && viber.endpoint) {
-        // TODO: Proxy to viber endpoint
-        // For now, fall through to OpenRouter
-      }
-    }
+    // viberId is reserved for future use when we want to route to specific vibers
+    // For now, all chat goes through OpenRouter
+    void viberId;
 
     // Fall back to OpenRouter API
     if (!OPENROUTER_API_KEY) {

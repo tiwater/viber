@@ -388,8 +388,8 @@ export class ViberAgent extends Agent {
 
         // Build assistant message in AI SDK v5 format
         const assistantMessage = {
-          role: "assistant",
-          content: [{ type: "text", text: finalText }],
+          role: "assistant" as const,
+          content: [{ type: "text" as const, text: finalText }],
           id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
           metadata: {
             agentName: this.singleAgentId || "team",

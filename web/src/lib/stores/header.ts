@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-export type ViberHeaderTab = "chat" | "dev-server";
+export type ViberHeaderTab = "chat" | "terminals" | "dev-server";
 
 export interface ViberSkillInfo {
   id: string;

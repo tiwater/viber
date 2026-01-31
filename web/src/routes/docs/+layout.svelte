@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { ChevronRight } from "lucide-svelte";
 
   let { children } = $props();
 
@@ -62,6 +61,10 @@
         { title: "Channels", href: "/docs/design/channels" },
         { title: "Skills", href: "/docs/design/skills" },
         { title: "Task Lifecycle", href: "/docs/design/task-lifecycle" },
+        {
+          title: "Tmux Coding Scenario",
+          href: "/docs/design/tmux-coding-scenario",
+        },
         { title: "Tool Execution", href: "/docs/design/tool-execution" },
         { title: "Memory", href: "/docs/design/memory" },
         { title: "Message Parts", href: "/docs/design/message-parts" },
@@ -89,53 +92,87 @@
   <title>{getPageTitle($page.url.pathname)} - Viber Docs</title>
 </svelte:head>
 
-<div class="container mx-auto px-4 py-8">
-  <div class="flex gap-8">
-    <!-- Sidebar -->
-    <aside class="w-64 shrink-0 hidden lg:block">
-      <nav class="sticky top-24 space-y-6">
-        {#each navigation as section}
-          <div>
-            <h3
-              class="font-semibold mb-2"
-              style="color: hsl(var(--foreground));"
-            >
-              {section.title}
-            </h3>
-            <ul class="space-y-1">
-              {#each section.items as item}
-                <li>
-                  <a
-                    href={item.href}
-                    class="flex items-center gap-1 px-3 py-1.5 rounded-md text-sm transition-colors {$page
-                      .url.pathname === item.href
-                      ? 'bg-primary/10 text-primary font-medium'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'}"
-                    style={$page.url.pathname === item.href
-                      ? "background: hsl(var(--primary) / 0.1); color: hsl(var(--primary));"
-                      : "color: hsl(var(--muted-foreground));"}
-                  >
-                    <ChevronRight class="w-3 h-3" />
-                    {item.title}
-                  </a>
-                </li>
-              {/each}
-            </ul>
-          </div>
-        {/each}
-      </nav>
-    </aside>
+<div class="flex flex-1 min-h-0 overflow-hidden">
+  <!-- Sidebar -->
+  <aside
+    class="w-56 shrink-0 hidden lg:block border-r border-border/50 overflow-y-auto bg-muted/20"
+  >
+    <nav class="py-6 pr-4">
+      {#each navigation as section, i}
+        <div class={i > 0 ? "mt-6" : ""}>
+          <h3 class="sidebar-section-title">
+            {section.title}
+          </h3>
+          <ul class="sidebar-list">
+            {#each section.items as item}
+              {@const isActive = $page.url.pathname === item.href}
+              <li>
+                <a
+                  href={item.href}
+                  class="sidebar-link"
+                  class:active={isActive}
+                >
+                  {item.title}
+                </a>
+              </li>
+            {/each}
+          </ul>
+        </div>
+      {/each}
+    </nav>
+  </aside>
 
-    <!-- Main content -->
-    <main class="flex-1 min-w-0 max-w-3xl">
+  <!-- Main content -->
+  <main class="flex-1 min-w-0 overflow-y-auto">
+    <div class="max-w-3xl mx-auto px-8 py-8">
       <article class="prose prose-slate dark:prose-invert max-w-none">
         {@render children()}
       </article>
-    </main>
-  </div>
+    </div>
+  </main>
 </div>
 
 <style>
+  /* Sidebar styles */
+  .sidebar-section-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: hsl(var(--foreground));
+    padding: 0.5rem 1rem 0.5rem 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .sidebar-link {
+    display: block;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    padding: 0.375rem 1rem 0.375rem 1.25rem;
+    color: hsl(var(--muted-foreground));
+    border-left: 2px solid transparent;
+    transition: all 0.15s ease;
+  }
+
+  .sidebar-link:hover {
+    color: hsl(var(--foreground));
+    background: hsl(var(--muted) / 0.5);
+  }
+
+  .sidebar-link.active {
+    color: hsl(var(--primary));
+    font-weight: 500;
+    border-left-color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.05);
+  }
+
+  /* Prose styles */
   :global(.prose) {
     color: hsl(var(--foreground));
   }

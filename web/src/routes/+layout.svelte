@@ -17,11 +17,11 @@
     Terminal as TerminalIcon,
     Server,
     BookOpen,
-  } from "lucide-svelte";
+  } from "@lucide/svelte";
 
   let { children } = $props();
   let skillsOpen = $state(false);
-  let skillsButtonEl: HTMLButtonElement | undefined;
+  let skillsButtonEl = $state<HTMLButtonElement | undefined>(undefined);
 
   function closeSkillsOnClickOutside(e: MouseEvent) {
     if (skillsButtonEl && !skillsButtonEl.contains(e.target as Node)) {

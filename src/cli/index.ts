@@ -89,59 +89,121 @@ program
       process.exit(0);
     });
 
-    if (connectToServer) {
-      // Connected mode - connect to command center
-      const controller = new ViberController({
-        serverUrl: options.server,
-        token,
-        viberId,
-        viberName: options.name,
-        enableDesktop: options.desktop,
-        reconnectInterval: parseInt(options.reconnectInterval, 10),
-        heartbeatInterval: parseInt(options.heartbeatInterval, 10),
-      });
+    // Start local WebSocket server for terminal streaming (always, both modes)
+    const { LocalServer } = await import("../daemon/local-server");
+    const localServer = new LocalServer({ port: 6008 });
+    await localServer.start();
 
-      controller.on("connected", () => {
-        console.log(`
-╔═══════════════════════════════════════════════════════════╗
-║                     VIBER RUNNING                          ║
-╠═══════════════════════════════════════════════════════════╣
-║  Mode:         Connected                                  ║
-║  Viber ID:     ${viberId.padEnd(40)}║
-║  Server:       ${options.server.slice(0, 40).padEnd(40)}║
-║  Status:       ● Connected                                ║
-╚═══════════════════════════════════════════════════════════╝
+    // Update cleanup to also stop local server
+    const fullCleanup = async () => {
+      console.log("\n[Viber] Shutting down...");
+      await localServer.stop();
+      await scheduler.stop();
+    };
 
-Waiting for tasks from command center...
-Press Ctrl+C to stop.
-        `);
-      });
+    process.removeAllListeners("SIGINT");
+    process.removeAllListeners("SIGTERM");
+    process.on("SIGINT", async () => {
+      await fullCleanup();
+      process.exit(0);
+    });
+    process.on("SIGTERM", async () => {
+      await fullCleanup();
+      process.exit(0);
+    });
 
-      controller.on("disconnected", () => {
-        console.log("[Viber] Connection lost. Reconnecting...");
-      });
+    // Determine server URL - use provided server, or default to local hub
+    const serverUrl = options.server || "ws://localhost:6007/ws";
+    const authToken = token || "local-dev-token"; // Local hub doesn't require auth
 
-      controller.on("error", (error) => {
-        console.error("[Viber] Error:", error.message);
-      });
+    const controller = new ViberController({
+      serverUrl,
+      token: authToken,
+      viberId,
+      viberName: options.name,
+      enableDesktop: options.desktop,
+      reconnectInterval: parseInt(options.reconnectInterval, 10),
+      heartbeatInterval: parseInt(options.heartbeatInterval, 10),
+    });
 
-      await controller.start();
-    } else {
-      // Local mode - just run scheduler
+    const isLocalHub = !options.server;
+
+    controller.on("connected", () => {
       console.log(`
 ╔═══════════════════════════════════════════════════════════╗
 ║                     VIBER RUNNING                          ║
 ╠═══════════════════════════════════════════════════════════╣
-║  Mode:         Local (Cron Only)                          ║
-║  Status:       ● Running                                  ║
+║  Mode:         ${
+        isLocalHub ? "Local Hub".padEnd(41) : "Remote Server".padEnd(41)
+      }║
+║  Viber ID:     ${viberId.slice(0, 40).padEnd(40)}║
+║  Server:       ${serverUrl.slice(0, 40).padEnd(40)}║
+║  Local WS:     ws://localhost:6008                        ║
+║  Status:       ● Connected                                ║
 ╚═══════════════════════════════════════════════════════════╝
 
-Running locally. Press Ctrl+C to stop.
+Waiting for tasks...
+Press Ctrl+C to stop.
       `);
+    });
 
-      // Keep process alive
-      await new Promise(() => {});
-    }
+    controller.on("disconnected", () => {
+      if (isLocalHub) {
+        console.log(
+          "[Viber] Disconnected from hub. Is the hub running? (pnpm dev:hub)",
+        );
+      } else {
+        console.log("[Viber] Connection lost. Reconnecting...");
+      }
+    });
+
+    controller.on("error", (error) => {
+      console.error("[Viber] Error:", error.message);
+    });
+
+    await controller.start();
+  });
+
+// ==================== viber hub ====================
+
+program
+  .command("hub")
+  .description("Start the hub server (coordinator for viber daemons)")
+  .option("-p, --port <port>", "Port to listen on", "6007")
+  .action(async (options) => {
+    const { HubServer } = await import("../daemon/hub");
+
+    const hub = new HubServer({
+      port: parseInt(options.port, 10),
+    });
+
+    // Handle graceful shutdown
+    process.on("SIGINT", async () => {
+      console.log("\n[Hub] Shutting down...");
+      await hub.stop();
+      process.exit(0);
+    });
+
+    process.on("SIGTERM", async () => {
+      console.log("\n[Hub] Shutting down...");
+      await hub.stop();
+      process.exit(0);
+    });
+
+    await hub.start();
+
+    console.log(`
+╔═══════════════════════════════════════════════════════════╗
+║                      HUB RUNNING                          ║
+╠═══════════════════════════════════════════════════════════╣
+║  REST API:     http://localhost:${options.port.padEnd(27)}║
+║  WebSocket:    ws://localhost:${options.port}/ws${" ".repeat(21)}║
+║  Status:       ● Ready for viber connections              ║
+╚═══════════════════════════════════════════════════════════╝
+
+Waiting for viber daemons to connect...
+Press Ctrl+C to stop.
+    `);
   });
 
 // ==================== viber run ====================

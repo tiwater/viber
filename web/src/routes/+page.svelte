@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ArrowRight, Bot, Database, Zap } from "lucide-svelte";
+  import { ArrowRight, Bot, Database, Zap } from "@lucide/svelte";
 </script>
 
 <svelte:head>

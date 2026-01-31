@@ -3,10 +3,11 @@
   import { page } from "$app/stores";
   import { goto } from "$app/navigation";
   import { headerStore } from "$lib/stores/header";
-  import { Send, Cpu } from "lucide-svelte";
+  import { Send, Cpu } from "@lucide/svelte";
   import { marked } from "marked";
   import { Button } from "$lib/components/ui/button";
-  import DevServerPanel from "$lib/components/DevServerPanel.svelte";
+  import DevServerPanel from "$lib/components/dev-server-panel.svelte";
+  import TerminalsPanel from "$lib/components/terminals-panel.svelte";
 
   // Markdown → HTML for message content (GFM, line breaks)
   marked.setOptions({ gfm: true, breaks: true });
@@ -354,7 +355,11 @@
 </svelte:head>
 
 <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
-  {#if activeTab === "dev-server"}
+  {#if activeTab === "terminals"}
+    <div class="flex-1 min-h-0 flex flex-col">
+      <TerminalsPanel></TerminalsPanel>
+    </div>
+  {:else if activeTab === "dev-server"}
     <div class="flex-1 min-h-0 flex flex-col">
       <DevServerPanel></DevServerPanel>
     </div>

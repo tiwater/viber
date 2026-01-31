@@ -15,6 +15,7 @@ import { EventEmitter } from "events";
 import WebSocket from "ws";
 import type { ViberOptions } from "../core/viber-agent";
 import { runTask } from "./runtime";
+import { TerminalManager } from "./terminal";
 
 // ==================== Types ====================
 
@@ -71,7 +72,12 @@ export type ControllerServerMessage =
   | { type: "task:stop"; taskId: string }
   | { type: "task:message"; taskId: string; message: string }
   | { type: "ping" }
-  | { type: "config:update"; config: Partial<ViberControllerConfig> };
+  | { type: "config:update"; config: Partial<ViberControllerConfig> }
+  // Terminal streaming messages
+  | { type: "terminal:list" }
+  | { type: "terminal:attach"; target: string }
+  | { type: "terminal:detach"; target: string }
+  | { type: "terminal:input"; target: string; keys: string };
 
 // Viber -> Server messages
 export type ControllerClientMessage =
@@ -81,7 +87,12 @@ export type ControllerClientMessage =
   | { type: "task:completed"; taskId: string; result: any }
   | { type: "task:error"; taskId: string; error: string }
   | { type: "heartbeat"; status: ViberStatus }
-  | { type: "pong" };
+  | { type: "pong" }
+  // Terminal streaming messages
+  | { type: "terminal:list"; sessions: any[]; panes: any[] }
+  | { type: "terminal:attached"; target: string; ok: boolean; error?: string }
+  | { type: "terminal:detached"; target: string }
+  | { type: "terminal:output"; target: string; data: string };
 
 // ==================== Controller ====================
 
@@ -93,6 +104,8 @@ export class ViberController extends EventEmitter {
   private runningTasks: Map<string, AbortController> = new Map();
   private isConnected = false;
   private shouldReconnect = true;
+  /** Terminal manager for streaming tmux panes */
+  private terminalManager = new TerminalManager();
 
   constructor(private config: ViberControllerConfig) {
     super();
@@ -119,6 +132,9 @@ export class ViberController extends EventEmitter {
       controller.abort();
       this.runningTasks.delete(taskId);
     }
+
+    // Detach all terminal streams
+    this.terminalManager.detachAll();
 
     // Clear timers
     this.stopHeartbeat();
@@ -252,6 +268,23 @@ export class ViberController extends EventEmitter {
           Object.assign(this.config, message.config);
           this.emit("config:update", message.config);
           break;
+
+        // Terminal streaming
+        case "terminal:list":
+          this.handleTerminalList();
+          break;
+
+        case "terminal:attach":
+          await this.handleTerminalAttach(message.target);
+          break;
+
+        case "terminal:detach":
+          this.handleTerminalDetach(message.target);
+          break;
+
+        case "terminal:input":
+          this.handleTerminalInput(message.target, message.keys);
+          break;
       }
     } catch (error) {
       console.error("[Viber] Failed to process message:", error);
@@ -334,6 +367,37 @@ export class ViberController extends EventEmitter {
     _message: string,
   ): Promise<void> {
     // Daemon is thin: no in-memory conversation. Cockpit sends full messages on next task submit.
+  }
+
+  // ==================== Terminal Streaming ====================
+
+  private handleTerminalList(): void {
+    const { sessions, panes } = this.terminalManager.list();
+    this.send({ type: "terminal:list", sessions, panes });
+  }
+
+  private async handleTerminalAttach(target: string): Promise<void> {
+    console.log(`[Viber] Attaching to terminal: ${target}`);
+    const ok = await this.terminalManager.attach(
+      target,
+      (data) => {
+        this.send({ type: "terminal:output", target, data });
+      },
+      () => {
+        this.send({ type: "terminal:detached", target });
+      }
+    );
+    this.send({ type: "terminal:attached", target, ok });
+  }
+
+  private handleTerminalDetach(target: string): void {
+    console.log(`[Viber] Detaching from terminal: ${target}`);
+    this.terminalManager.detach(target);
+    this.send({ type: "terminal:detached", target });
+  }
+
+  private handleTerminalInput(target: string, keys: string): void {
+    this.terminalManager.sendInput(target, keys);
   }
 
   // ==================== Communication ====================

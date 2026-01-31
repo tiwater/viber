@@ -64,7 +64,7 @@ export class HubServer {
         if (err.code === "EADDRINUSE") {
           console.error(`[Hub] Port ${this.config.port} is already in use.`);
           console.error(
-            `[Hub] Kill the existing process with: lsof -ti :${this.config.port} | xargs kill`,
+            `[Hub] Kill the existing process with: lsof -ti :${this.config.port} | xargs kill`
           );
           reject(err);
         } else {
@@ -140,7 +140,7 @@ export class HubServer {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     res.setHeader(
       "Access-Control-Allow-Headers",
-      "Content-Type, Authorization",
+      "Content-Type, Authorization"
     );
 
     if (method === "OPTIONS") {
@@ -183,7 +183,7 @@ export class HubServer {
         status: "ok",
         vibers: this.vibers.size,
         tasks: this.tasks.size,
-      }),
+      })
     );
   }
 
@@ -251,7 +251,7 @@ export class HubServer {
             taskId,
             goal,
             messages,
-          }),
+          })
         );
 
         res.writeHead(200, { "Content-Type": "application/json" });
@@ -297,7 +297,7 @@ export class HubServer {
         error: task.error,
         createdAt: task.createdAt.toISOString(),
         completedAt: task.completedAt?.toISOString(),
-      }),
+      })
     );
   }
 

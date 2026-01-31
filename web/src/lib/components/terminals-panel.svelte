@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from "svelte";
   import TerminalView from "./terminal-view.svelte";
   import { Button } from "$lib/components/ui/button";
-  import { RefreshCw, Plus, Minus } from "lucide-svelte";
+  import { RefreshCw, Plus, Minus } from "@lucide/svelte";
 
   interface TmuxPane {
     session: string;

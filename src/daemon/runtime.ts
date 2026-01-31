@@ -8,6 +8,7 @@
 
 import * as fs from "fs/promises";
 import * as path from "path";
+import { fileURLToPath } from "url";
 import * as yaml from "yaml";
 import { getViberPath } from "../config";
 import type { AgentConfig } from "../core/config";
@@ -20,6 +21,9 @@ export interface DaemonRunTaskOptions {
   agentConfig?: AgentConfig;
   signal?: AbortSignal;
 }
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const DEFAULTS_AGENTS_DIR = path.join(
   path.dirname(__dirname),
@@ -90,12 +94,16 @@ export async function runTask(
   options: DaemonRunTaskOptions & { taskId: string },
   messages?: { role: string; content: string }[],
 ): Promise<{ streamResult: Awaited<ReturnType<Agent["streamText"]>>; agent: Agent }> {
-  const { taskId, singleAgentId = "default", agentConfig: overrideConfig, signal } = options;
+  const { taskId, singleAgentId = "default", agentConfig: overrideConfig, model: modelOverride, signal } = options;
 
-  const config =
+  let config =
     overrideConfig ?? (await loadAgentConfig(singleAgentId));
   if (!config) {
     throw new Error(`Agent '${singleAgentId}' not found. Add ~/.viber/agents/${singleAgentId}.yaml or use built-in default.`);
+  }
+
+  if (modelOverride) {
+    config = { ...config, model: modelOverride };
   }
 
   const agent = new Agent(config as AgentConfig);
